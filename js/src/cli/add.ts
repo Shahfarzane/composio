@@ -7,7 +7,7 @@ import { GetConnectorListResDTO } from "../sdk/client";
 
 export default class AddCommand {
   private program: Command;
-  private composioClient: Composio;
+  private composioClient?: Composio;
 
   constructor(program: Command) {
     this.program = program;
@@ -18,13 +18,15 @@ export default class AddCommand {
       .option("-f, --force", "Force the connection setup")
       .action(this.handleAction.bind(this));
 
-    this.composioClient = new Composio();
+  
   }
 
   private async handleAction(
     appName: string,
     options: { force?: boolean },
   ): Promise<void> {
+    this.composioClient = new Composio();
+
     let integration: GetConnectorListResDTO | undefined =
       await this.composioClient.integrations.list({
         // @ts-ignore
@@ -65,6 +67,8 @@ export default class AddCommand {
     const startTime = Date.now();
     const pollInterval = 3000; // 3 seconds
 
+    this.composioClient = new Composio();
+
     while (Date.now() - startTime < timeout) {
       try {
         const data = (await this.composioClient.connectedAccounts.get({
@@ -87,6 +91,7 @@ export default class AddCommand {
   }
 
   private async setupConnections(integrationId: string): Promise<void> {
+    this.composioClient = new Composio();
     const data = await this.composioClient.integrations.get({ integrationId });
     const { expectedInputFields } = data;
 
@@ -118,6 +123,7 @@ export default class AddCommand {
   }
 
   private async createIntegration(appName: string) {
+    this.composioClient = new Composio();
     const app = await this.composioClient.apps.get({
       appKey: appName.toLowerCase(),
     });
@@ -207,6 +213,7 @@ export default class AddCommand {
     useComposioAuth: boolean,
     config: Record<string, any>,
   ) {
+    this.composioClient = new Composio();
     await this.composioClient.integrations.create({
       appId: app.id,
       authScheme: authMode,
