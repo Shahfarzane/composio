@@ -298,7 +298,7 @@
               },
               "properties": {
                 "precision": "very-high",
-                "security-severity": "8.0",
+                "security-severity": "7.5",
                 "tags": [
                   "vulnerability",
                   "security",
@@ -428,12 +428,39 @@
               },
               "helpUri": "https://avd.aquasec.com/nvd/cve-2024-12905",
               "help": {
-                "text": "Vulnerability CVE-2024-12905\nSeverity: HIGH\nPackage: tar-fs\nFixed Version: 1.16.4, 2.1.2, 3.0.8\nLink: [CVE-2024-12905](https://avd.aquasec.com/nvd/cve-2024-12905)\nAn Improper Link Resolution Before File Access (\"Link Following\") and Improper Limitation of a Pathname to a Restricted Directory (\"Path Traversal\"). This vulnerability occurs when extracting a maliciously crafted tar file, which can result in unauthorized file writes or overwrites outside the intended extraction directory. The issue is associated with index.js in the tar-fs package.\n\nThis issue affects tar-fs: from 0.0.0 before 1.16.4, from 2.0.0 before 2.1.2, from 3.0.0 before 3.0.8.",
-                "markdown": "**Vulnerability CVE-2024-12905**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|HIGH|tar-fs|1.16.4, 2.1.2, 3.0.8|[CVE-2024-12905](https://avd.aquasec.com/nvd/cve-2024-12905)|\n\nAn Improper Link Resolution Before File Access (\"Link Following\") and Improper Limitation of a Pathname to a Restricted Directory (\"Path Traversal\"). This vulnerability occurs when extracting a maliciously crafted tar file, which can result in unauthorized file writes or overwrites outside the intended extraction directory. The issue is associated with index.js in the tar-fs package.\n\nThis issue affects tar-fs: from 0.0.0 before 1.16.4, from 2.0.0 before 2.1.2, from 3.0.0 before 3.0.8."
+                "text": "Vulnerability CVE-2024-12905\nSeverity: HIGH\nPackage: tar-fs\nFixed Version: 1.16.4, 2.1.2, 3.0.7\nLink: [CVE-2024-12905](https://avd.aquasec.com/nvd/cve-2024-12905)\nAn Improper Link Resolution Before File Access (\"Link Following\") and Improper Limitation of a Pathname to a Restricted Directory (\"Path Traversal\"). This vulnerability occurs when extracting a maliciously crafted tar file, which can result in unauthorized file writes or overwrites outside the intended extraction directory. The issue is associated with index.js in the tar-fs package.\n\nThis issue affects tar-fs: from 0.0.0 before 1.16.4, from 2.0.0 before 2.1.2, from 3.0.0 before 3.0.8.",
+                "markdown": "**Vulnerability CVE-2024-12905**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|HIGH|tar-fs|1.16.4, 2.1.2, 3.0.7|[CVE-2024-12905](https://avd.aquasec.com/nvd/cve-2024-12905)|\n\nAn Improper Link Resolution Before File Access (\"Link Following\") and Improper Limitation of a Pathname to a Restricted Directory (\"Path Traversal\"). This vulnerability occurs when extracting a maliciously crafted tar file, which can result in unauthorized file writes or overwrites outside the intended extraction directory. The issue is associated with index.js in the tar-fs package.\n\nThis issue affects tar-fs: from 0.0.0 before 1.16.4, from 2.0.0 before 2.1.2, from 3.0.0 before 3.0.8."
               },
               "properties": {
                 "precision": "very-high",
                 "security-severity": "7.5",
+                "tags": [
+                  "vulnerability",
+                  "security",
+                  "HIGH"
+                ]
+              }
+            },
+            {
+              "id": "CVE-2025-48387",
+              "name": "LanguageSpecificPackageVulnerability",
+              "shortDescription": {
+                "text": "tar-fs: tar-fs has issue where extract can write outside the specified dir with a specific tarball"
+              },
+              "fullDescription": {
+                "text": "tar-fs provides filesystem bindings for tar-stream. Versions prior to 3.0.9, 2.1.3, and 1.16.5 have an issue where an extract can write outside the specified dir with a specific tarball. This has been patched in versions 3.0.9, 2.1.3, and 1.16.5. As a workaround, use the ignore option to ignore non files/directories."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "helpUri": "https://avd.aquasec.com/nvd/cve-2025-48387",
+              "help": {
+                "text": "Vulnerability CVE-2025-48387\nSeverity: HIGH\nPackage: tar-fs\nFixed Version: 1.16.5, 2.1.3, 3.0.9\nLink: [CVE-2025-48387](https://avd.aquasec.com/nvd/cve-2025-48387)\ntar-fs provides filesystem bindings for tar-stream. Versions prior to 3.0.9, 2.1.3, and 1.16.5 have an issue where an extract can write outside the specified dir with a specific tarball. This has been patched in versions 3.0.9, 2.1.3, and 1.16.5. As a workaround, use the ignore option to ignore non files/directories.",
+                "markdown": "**Vulnerability CVE-2025-48387**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|HIGH|tar-fs|1.16.5, 2.1.3, 3.0.9|[CVE-2025-48387](https://avd.aquasec.com/nvd/cve-2025-48387)|\n\ntar-fs provides filesystem bindings for tar-stream. Versions prior to 3.0.9, 2.1.3, and 1.16.5 have an issue where an extract can write outside the specified dir with a specific tarball. This has been patched in versions 3.0.9, 2.1.3, and 1.16.5. As a workaround, use the ignore option to ignore non files/directories."
+              },
+              "properties": {
+                "precision": "very-high",
+                "security-severity": "8.0",
                 "tags": [
                   "vulnerability",
                   "security",
@@ -604,6 +631,33 @@
               }
             },
             {
+              "id": "CVE-2025-5889",
+              "name": "LanguageSpecificPackageVulnerability",
+              "shortDescription": {
+                "text": "A vulnerability was found in juliangruber brace-expansion up to 1.1.11 ..."
+              },
+              "fullDescription": {
+                "text": "A vulnerability was found in juliangruber brace-expansion up to 1.1.11/2.0.1/3.0.0/4.0.0. It has been rated as problematic. Affected by this issue is the function expand of the file index.js. The manipulation leads to inefficient regular expression complexity. The attack may be launched remotely. The complexity of an attack is rather high. The exploitation is known to be difficult. The exploit has been disclosed to the public and may be used. Upgrading to version 1.1.12, 2.0.2, 3.0.1 and 4.0.1 is able to address this issue. The name of the patch is a5b98a4f30d7813266b221435e1eaaf25a1b0ac5. It is recommended to upgrade the affected component."
+              },
+              "defaultConfiguration": {
+                "level": "note"
+              },
+              "helpUri": "https://avd.aquasec.com/nvd/cve-2025-5889",
+              "help": {
+                "text": "Vulnerability CVE-2025-5889\nSeverity: LOW\nPackage: brace-expansion\nFixed Version: 2.0.2, 1.1.12, 3.0.1, 4.0.1\nLink: [CVE-2025-5889](https://avd.aquasec.com/nvd/cve-2025-5889)\nA vulnerability was found in juliangruber brace-expansion up to 1.1.11/2.0.1/3.0.0/4.0.0. It has been rated as problematic. Affected by this issue is the function expand of the file index.js. The manipulation leads to inefficient regular expression complexity. The attack may be launched remotely. The complexity of an attack is rather high. The exploitation is known to be difficult. The exploit has been disclosed to the public and may be used. Upgrading to version 1.1.12, 2.0.2, 3.0.1 and 4.0.1 is able to address this issue. The name of the patch is a5b98a4f30d7813266b221435e1eaaf25a1b0ac5. It is recommended to upgrade the affected component.",
+                "markdown": "**Vulnerability CVE-2025-5889**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|LOW|brace-expansion|2.0.2, 1.1.12, 3.0.1, 4.0.1|[CVE-2025-5889](https://avd.aquasec.com/nvd/cve-2025-5889)|\n\nA vulnerability was found in juliangruber brace-expansion up to 1.1.11/2.0.1/3.0.0/4.0.0. It has been rated as problematic. Affected by this issue is the function expand of the file index.js. The manipulation leads to inefficient regular expression complexity. The attack may be launched remotely. The complexity of an attack is rather high. The exploitation is known to be difficult. The exploit has been disclosed to the public and may be used. Upgrading to version 1.1.12, 2.0.2, 3.0.1 and 4.0.1 is able to address this issue. The name of the patch is a5b98a4f30d7813266b221435e1eaaf25a1b0ac5. It is recommended to upgrade the affected component."
+              },
+              "properties": {
+                "precision": "very-high",
+                "security-severity": "3.1",
+                "tags": [
+                  "vulnerability",
+                  "security",
+                  "LOW"
+                ]
+              }
+            },
+            {
               "id": "CVE-2024-41818",
               "name": "LanguageSpecificPackageVulnerability",
               "shortDescription": {
@@ -766,6 +820,60 @@
               }
             },
             {
+              "id": "CVE-2025-32421",
+              "name": "LanguageSpecificPackageVulnerability",
+              "shortDescription": {
+                "text": "next.js: Next.js Race Condition to Cache Poisoning"
+              },
+              "fullDescription": {
+                "text": "Next.js is a React framework for building full-stack web applications. Versions prior to 14.2.24 and 15.1.6 have a race-condition vulnerability. This issue only affects the Pages Router under certain misconfigurations, causing normal endpoints to serve `pageProps` data instead of standard HTML. This issue was patched in versions 15.1.6 and 14.2.24 by stripping the `x-now-route-matches` header from incoming requests. Applications hosted on Vercel's platform are not affected by this issue, as the platform does not cache responses based solely on `200 OK` status without explicit `cache-control` headers. Those who self-host Next.js deployments and are unable to upgrade immediately can mitigate this vulnerability by stripping the `x-now-route-matches` header from all incoming requests at the content development network and setting `cache-control: no-store` for all responses under risk. The maintainers of Next.js strongly recommend only caching responses with explicit cache-control headers."
+              },
+              "defaultConfiguration": {
+                "level": "note"
+              },
+              "helpUri": "https://avd.aquasec.com/nvd/cve-2025-32421",
+              "help": {
+                "text": "Vulnerability CVE-2025-32421\nSeverity: LOW\nPackage: next\nFixed Version: 14.2.24, 15.1.6\nLink: [CVE-2025-32421](https://avd.aquasec.com/nvd/cve-2025-32421)\nNext.js is a React framework for building full-stack web applications. Versions prior to 14.2.24 and 15.1.6 have a race-condition vulnerability. This issue only affects the Pages Router under certain misconfigurations, causing normal endpoints to serve `pageProps` data instead of standard HTML. This issue was patched in versions 15.1.6 and 14.2.24 by stripping the `x-now-route-matches` header from incoming requests. Applications hosted on Vercel's platform are not affected by this issue, as the platform does not cache responses based solely on `200 OK` status without explicit `cache-control` headers. Those who self-host Next.js deployments and are unable to upgrade immediately can mitigate this vulnerability by stripping the `x-now-route-matches` header from all incoming requests at the content development network and setting `cache-control: no-store` for all responses under risk. The maintainers of Next.js strongly recommend only caching responses with explicit cache-control headers.",
+                "markdown": "**Vulnerability CVE-2025-32421**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|LOW|next|14.2.24, 15.1.6|[CVE-2025-32421](https://avd.aquasec.com/nvd/cve-2025-32421)|\n\nNext.js is a React framework for building full-stack web applications. Versions prior to 14.2.24 and 15.1.6 have a race-condition vulnerability. This issue only affects the Pages Router under certain misconfigurations, causing normal endpoints to serve `pageProps` data instead of standard HTML. This issue was patched in versions 15.1.6 and 14.2.24 by stripping the `x-now-route-matches` header from incoming requests. Applications hosted on Vercel's platform are not affected by this issue, as the platform does not cache responses based solely on `200 OK` status without explicit `cache-control` headers. Those who self-host Next.js deployments and are unable to upgrade immediately can mitigate this vulnerability by stripping the `x-now-route-matches` header from all incoming requests at the content development network and setting `cache-control: no-store` for all responses under risk. The maintainers of Next.js strongly recommend only caching responses with explicit cache-control headers."
+              },
+              "properties": {
+                "precision": "very-high",
+                "security-severity": "3.7",
+                "tags": [
+                  "vulnerability",
+                  "security",
+                  "LOW"
+                ]
+              }
+            },
+            {
+              "id": "CVE-2025-48068",
+              "name": "LanguageSpecificPackageVulnerability",
+              "shortDescription": {
+                "text": "next.js: Information exposure in Next.js dev server due to lack of origin verification"
+              },
+              "fullDescription": {
+                "text": "Next.js is a React framework for building full-stack web applications. In versions starting from 13.0 to before 14.2.30 and 15.0.0 to before 15.2.2, Next.js may have allowed limited source code exposure when the dev server was running with the App Router enabled. The vulnerability only affects local development environments and requires the user to visit a malicious webpage while npm run dev is active. This issue has been patched in versions 14.2.30 and 15.2.2."
+              },
+              "defaultConfiguration": {
+                "level": "note"
+              },
+              "helpUri": "https://avd.aquasec.com/nvd/cve-2025-48068",
+              "help": {
+                "text": "Vulnerability CVE-2025-48068\nSeverity: LOW\nPackage: next\nFixed Version: 15.2.2, 14.2.30\nLink: [CVE-2025-48068](https://avd.aquasec.com/nvd/cve-2025-48068)\nNext.js is a React framework for building full-stack web applications. In versions starting from 13.0 to before 14.2.30 and 15.0.0 to before 15.2.2, Next.js may have allowed limited source code exposure when the dev server was running with the App Router enabled. The vulnerability only affects local development environments and requires the user to visit a malicious webpage while npm run dev is active. This issue has been patched in versions 14.2.30 and 15.2.2.",
+                "markdown": "**Vulnerability CVE-2025-48068**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|LOW|next|15.2.2, 14.2.30|[CVE-2025-48068](https://avd.aquasec.com/nvd/cve-2025-48068)|\n\nNext.js is a React framework for building full-stack web applications. In versions starting from 13.0 to before 14.2.30 and 15.0.0 to before 15.2.2, Next.js may have allowed limited source code exposure when the dev server was running with the App Router enabled. The vulnerability only affects local development environments and requires the user to visit a malicious webpage while npm run dev is active. This issue has been patched in versions 14.2.30 and 15.2.2."
+              },
+              "properties": {
+                "precision": "very-high",
+                "security-severity": "2.0",
+                "tags": [
+                  "vulnerability",
+                  "security",
+                  "LOW"
+                ]
+              }
+            },
+            {
               "id": "CVE-2024-12797",
               "name": "LanguageSpecificPackageVulnerability",
               "shortDescription": {
@@ -816,6 +924,33 @@
                   "vulnerability",
                   "security",
                   "CRITICAL"
+                ]
+              }
+            },
+            {
+              "id": "CVE-2024-47081",
+              "name": "LanguageSpecificPackageVulnerability",
+              "shortDescription": {
+                "text": "requests: Requests vulnerable to .netrc credentials leak via malicious URLs"
+              },
+              "fullDescription": {
+                "text": "Requests is a HTTP library. Due to a URL parsing issue, Requests releases prior to 2.32.4 may leak .netrc credentials to third parties for specific maliciously-crafted URLs. Users should upgrade to version 2.32.4 to receive a fix. For older versions of Requests, use of the .netrc file can be disabled with `trust_env=False` on one's Requests Session."
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "helpUri": "https://avd.aquasec.com/nvd/cve-2024-47081",
+              "help": {
+                "text": "Vulnerability CVE-2024-47081\nSeverity: MEDIUM\nPackage: requests\nFixed Version: 2.32.4\nLink: [CVE-2024-47081](https://avd.aquasec.com/nvd/cve-2024-47081)\nRequests is a HTTP library. Due to a URL parsing issue, Requests releases prior to 2.32.4 may leak .netrc credentials to third parties for specific maliciously-crafted URLs. Users should upgrade to version 2.32.4 to receive a fix. For older versions of Requests, use of the .netrc file can be disabled with `trust_env=False` on one's Requests Session.",
+                "markdown": "**Vulnerability CVE-2024-47081**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|MEDIUM|requests|2.32.4|[CVE-2024-47081](https://avd.aquasec.com/nvd/cve-2024-47081)|\n\nRequests is a HTTP library. Due to a URL parsing issue, Requests releases prior to 2.32.4 may leak .netrc credentials to third parties for specific maliciously-crafted URLs. Users should upgrade to version 2.32.4 to receive a fix. For older versions of Requests, use of the .netrc file can be disabled with `trust_env=False` on one's Requests Session."
+              },
+              "properties": {
+                "precision": "very-high",
+                "security-severity": "5.3",
+                "tags": [
+                  "vulnerability",
+                  "security",
+                  "MEDIUM"
                 ]
               }
             },
@@ -1123,15 +1258,15 @@
                 "text": "A vulnerability, which was classified as problematic, was found in PyT ..."
               },
               "fullDescription": {
-                "text": "A vulnerability, which was classified as problematic, was found in PyTorch 2.6.0. Affected is the function torch.nn.functional.ctc_loss of the file aten/src/ATen/native/LossCTC.cpp. The manipulation leads to denial of service. An attack has to be approached locally. The exploit has been disclosed to the public and may be used. The name of the patch is 46fc5d8e360127361211cb237d5f9eef0223e567. It is recommended to apply a patch to fix this issue."
+                "text": "A vulnerability, which was classified as problematic, was found in PyTorch 2.6.0. Affected is the function torch.nn.functional.ctc_loss of the file aten/src/ATen/native/LossCTC.cpp. The manipulation leads to denial of service. An attack has to be approached locally. The exploit has been disclosed to the public and may be used. The real existence of this vulnerability is still doubted at the moment. The name of the patch is 46fc5d8e360127361211cb237d5f9eef0223e567. It is recommended to apply a patch to fix this issue. The security policy of the project warns to use unknown models which might establish malicious effects."
               },
               "defaultConfiguration": {
                 "level": "warning"
               },
               "helpUri": "https://avd.aquasec.com/nvd/cve-2025-3730",
               "help": {
-                "text": "Vulnerability CVE-2025-3730\nSeverity: MEDIUM\nPackage: torch\nFixed Version: \nLink: [CVE-2025-3730](https://avd.aquasec.com/nvd/cve-2025-3730)\nA vulnerability, which was classified as problematic, was found in PyTorch 2.6.0. Affected is the function torch.nn.functional.ctc_loss of the file aten/src/ATen/native/LossCTC.cpp. The manipulation leads to denial of service. An attack has to be approached locally. The exploit has been disclosed to the public and may be used. The name of the patch is 46fc5d8e360127361211cb237d5f9eef0223e567. It is recommended to apply a patch to fix this issue.",
-                "markdown": "**Vulnerability CVE-2025-3730**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|MEDIUM|torch||[CVE-2025-3730](https://avd.aquasec.com/nvd/cve-2025-3730)|\n\nA vulnerability, which was classified as problematic, was found in PyTorch 2.6.0. Affected is the function torch.nn.functional.ctc_loss of the file aten/src/ATen/native/LossCTC.cpp. The manipulation leads to denial of service. An attack has to be approached locally. The exploit has been disclosed to the public and may be used. The name of the patch is 46fc5d8e360127361211cb237d5f9eef0223e567. It is recommended to apply a patch to fix this issue."
+                "text": "Vulnerability CVE-2025-3730\nSeverity: MEDIUM\nPackage: torch\nFixed Version: \nLink: [CVE-2025-3730](https://avd.aquasec.com/nvd/cve-2025-3730)\nA vulnerability, which was classified as problematic, was found in PyTorch 2.6.0. Affected is the function torch.nn.functional.ctc_loss of the file aten/src/ATen/native/LossCTC.cpp. The manipulation leads to denial of service. An attack has to be approached locally. The exploit has been disclosed to the public and may be used. The real existence of this vulnerability is still doubted at the moment. The name of the patch is 46fc5d8e360127361211cb237d5f9eef0223e567. It is recommended to apply a patch to fix this issue. The security policy of the project warns to use unknown models which might establish malicious effects.",
+                "markdown": "**Vulnerability CVE-2025-3730**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|MEDIUM|torch||[CVE-2025-3730](https://avd.aquasec.com/nvd/cve-2025-3730)|\n\nA vulnerability, which was classified as problematic, was found in PyTorch 2.6.0. Affected is the function torch.nn.functional.ctc_loss of the file aten/src/ATen/native/LossCTC.cpp. The manipulation leads to denial of service. An attack has to be approached locally. The exploit has been disclosed to the public and may be used. The real existence of this vulnerability is still doubted at the moment. The name of the patch is 46fc5d8e360127361211cb237d5f9eef0223e567. It is recommended to apply a patch to fix this issue. The security policy of the project warns to use unknown models which might establish malicious effects."
               },
               "properties": {
                 "precision": "very-high",
@@ -1157,8 +1292,8 @@
               },
               "helpUri": "https://avd.aquasec.com/nvd/cve-2025-2953",
               "help": {
-                "text": "Vulnerability CVE-2025-2953\nSeverity: LOW\nPackage: torch\nFixed Version: \nLink: [CVE-2025-2953](https://avd.aquasec.com/nvd/cve-2025-2953)\nA vulnerability, which was classified as problematic, has been found in PyTorch 2.6.0+cu124. Affected by this issue is the function torch.mkldnn_max_pool2d. The manipulation leads to denial of service. An attack has to be approached locally. The exploit has been disclosed to the public and may be used. The real existence of this vulnerability is still doubted at the moment. The security policy of the project warns to use unknown models which might establish malicious effects.",
-                "markdown": "**Vulnerability CVE-2025-2953**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|LOW|torch||[CVE-2025-2953](https://avd.aquasec.com/nvd/cve-2025-2953)|\n\nA vulnerability, which was classified as problematic, has been found in PyTorch 2.6.0+cu124. Affected by this issue is the function torch.mkldnn_max_pool2d. The manipulation leads to denial of service. An attack has to be approached locally. The exploit has been disclosed to the public and may be used. The real existence of this vulnerability is still doubted at the moment. The security policy of the project warns to use unknown models which might establish malicious effects."
+                "text": "Vulnerability CVE-2025-2953\nSeverity: LOW\nPackage: torch\nFixed Version: 2.7.1-rc1\nLink: [CVE-2025-2953](https://avd.aquasec.com/nvd/cve-2025-2953)\nA vulnerability, which was classified as problematic, has been found in PyTorch 2.6.0+cu124. Affected by this issue is the function torch.mkldnn_max_pool2d. The manipulation leads to denial of service. An attack has to be approached locally. The exploit has been disclosed to the public and may be used. The real existence of this vulnerability is still doubted at the moment. The security policy of the project warns to use unknown models which might establish malicious effects.",
+                "markdown": "**Vulnerability CVE-2025-2953**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|LOW|torch|2.7.1-rc1|[CVE-2025-2953](https://avd.aquasec.com/nvd/cve-2025-2953)|\n\nA vulnerability, which was classified as problematic, has been found in PyTorch 2.6.0+cu124. Affected by this issue is the function torch.mkldnn_max_pool2d. The manipulation leads to denial of service. An attack has to be approached locally. The exploit has been disclosed to the public and may be used. The real existence of this vulnerability is still doubted at the moment. The security policy of the project warns to use unknown models which might establish malicious effects."
               },
               "properties": {
                 "precision": "very-high",
@@ -1306,25 +1441,25 @@
               }
             },
             {
-              "id": "CVE-2024-42367",
+              "id": "CVE-2025-2099",
               "name": "LanguageSpecificPackageVulnerability",
               "shortDescription": {
-                "text": "aiohttp: python-aiohttp: Compressed files as symlinks are not protected from path traversal"
+                "text": "transformers: Regular Expression Denial of Service (ReDoS) in huggingface/transformers"
               },
               "fullDescription": {
-                "text": "aiohttp is an asynchronous HTTP client/server framework for asyncio and Python. Prior to version 3.10.2, static routes which contain files with compressed variants (`.gz` or `.br` extension) are vulnerable to path traversal outside the root directory if those variants are symbolic links. The server protects static routes from path traversal outside the root directory when `follow_symlinks=False` (default).  It does this by resolving the requested URL to an absolute path and then checking that path relative to the root. However, these checks are not performed when looking for compressed variants in the `FileResponse` class, and symbolic links are then automatically followed when performing the `Path.stat()` and `Path.open()` to send the file. Version 3.10.2 contains a patch for the issue."
+                "text": "A vulnerability in the `preprocess_string()` function of the `transformers.testing_utils` module in huggingface/transformers version v4.48.3 allows for a Regular Expression Denial of Service (ReDoS) attack. The regular expression used to process code blocks in docstrings contains nested quantifiers, leading to exponential backtracking when processing input with a large number of newline characters. An attacker can exploit this by providing a specially crafted payload, causing high CPU usage and potential application downtime, effectively resulting in a Denial of Service (DoS) scenario."
               },
               "defaultConfiguration": {
                 "level": "warning"
               },
-              "helpUri": "https://avd.aquasec.com/nvd/cve-2024-42367",
+              "helpUri": "https://avd.aquasec.com/nvd/cve-2025-2099",
               "help": {
-                "text": "Vulnerability CVE-2024-42367\nSeverity: MEDIUM\nPackage: aiohttp\nFixed Version: 3.10.2\nLink: [CVE-2024-42367](https://avd.aquasec.com/nvd/cve-2024-42367)\naiohttp is an asynchronous HTTP client/server framework for asyncio and Python. Prior to version 3.10.2, static routes which contain files with compressed variants (`.gz` or `.br` extension) are vulnerable to path traversal outside the root directory if those variants are symbolic links. The server protects static routes from path traversal outside the root directory when `follow_symlinks=False` (default).  It does this by resolving the requested URL to an absolute path and then checking that path relative to the root. However, these checks are not performed when looking for compressed variants in the `FileResponse` class, and symbolic links are then automatically followed when performing the `Path.stat()` and `Path.open()` to send the file. Version 3.10.2 contains a patch for the issue.",
-                "markdown": "**Vulnerability CVE-2024-42367**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|MEDIUM|aiohttp|3.10.2|[CVE-2024-42367](https://avd.aquasec.com/nvd/cve-2024-42367)|\n\naiohttp is an asynchronous HTTP client/server framework for asyncio and Python. Prior to version 3.10.2, static routes which contain files with compressed variants (`.gz` or `.br` extension) are vulnerable to path traversal outside the root directory if those variants are symbolic links. The server protects static routes from path traversal outside the root directory when `follow_symlinks=False` (default).  It does this by resolving the requested URL to an absolute path and then checking that path relative to the root. However, these checks are not performed when looking for compressed variants in the `FileResponse` class, and symbolic links are then automatically followed when performing the `Path.stat()` and `Path.open()` to send the file. Version 3.10.2 contains a patch for the issue."
+                "text": "Vulnerability CVE-2025-2099\nSeverity: MEDIUM\nPackage: transformers\nFixed Version: 4.50.0\nLink: [CVE-2025-2099](https://avd.aquasec.com/nvd/cve-2025-2099)\nA vulnerability in the `preprocess_string()` function of the `transformers.testing_utils` module in huggingface/transformers version v4.48.3 allows for a Regular Expression Denial of Service (ReDoS) attack. The regular expression used to process code blocks in docstrings contains nested quantifiers, leading to exponential backtracking when processing input with a large number of newline characters. An attacker can exploit this by providing a specially crafted payload, causing high CPU usage and potential application downtime, effectively resulting in a Denial of Service (DoS) scenario.",
+                "markdown": "**Vulnerability CVE-2025-2099**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|MEDIUM|transformers|4.50.0|[CVE-2025-2099](https://avd.aquasec.com/nvd/cve-2025-2099)|\n\nA vulnerability in the `preprocess_string()` function of the `transformers.testing_utils` module in huggingface/transformers version v4.48.3 allows for a Regular Expression Denial of Service (ReDoS) attack. The regular expression used to process code blocks in docstrings contains nested quantifiers, leading to exponential backtracking when processing input with a large number of newline characters. An attacker can exploit this by providing a specially crafted payload, causing high CPU usage and potential application downtime, effectively resulting in a Denial of Service (DoS) scenario."
               },
               "properties": {
                 "precision": "very-high",
-                "security-severity": "4.8",
+                "security-severity": "5.3",
                 "tags": [
                   "vulnerability",
                   "security",
@@ -1495,6 +1630,33 @@
               }
             },
             {
+              "id": "CVE-2025-1793",
+              "name": "LanguageSpecificPackageVulnerability",
+              "shortDescription": {
+                "text": "llama-index: LlamaIndex SQL Injection Vulnerability"
+              },
+              "fullDescription": {
+                "text": "Multiple vector store integrations in run-llama/llama_index version v0.12.21 have SQL injection vulnerabilities. These vulnerabilities allow an attacker to read and write data using SQL, potentially leading to unauthorized access to data of other users depending on the usage of the llama-index library in a web application."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "helpUri": "https://avd.aquasec.com/nvd/cve-2025-1793",
+              "help": {
+                "text": "Vulnerability CVE-2025-1793\nSeverity: CRITICAL\nPackage: llama-index\nFixed Version: 0.12.28\nLink: [CVE-2025-1793](https://avd.aquasec.com/nvd/cve-2025-1793)\nMultiple vector store integrations in run-llama/llama_index version v0.12.21 have SQL injection vulnerabilities. These vulnerabilities allow an attacker to read and write data using SQL, potentially leading to unauthorized access to data of other users depending on the usage of the llama-index library in a web application.",
+                "markdown": "**Vulnerability CVE-2025-1793**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|CRITICAL|llama-index|0.12.28|[CVE-2025-1793](https://avd.aquasec.com/nvd/cve-2025-1793)|\n\nMultiple vector store integrations in run-llama/llama_index version v0.12.21 have SQL injection vulnerabilities. These vulnerabilities allow an attacker to read and write data using SQL, potentially leading to unauthorized access to data of other users depending on the usage of the llama-index library in a web application."
+              },
+              "properties": {
+                "precision": "very-high",
+                "security-severity": "9.8",
+                "tags": [
+                  "vulnerability",
+                  "security",
+                  "CRITICAL"
+                ]
+              }
+            },
+            {
               "id": "CVE-2024-12704",
               "name": "LanguageSpecificPackageVulnerability",
               "shortDescription": {
@@ -1576,6 +1738,33 @@
               }
             },
             {
+              "id": "CVE-2025-1753",
+              "name": "LanguageSpecificPackageVulnerability",
+              "shortDescription": {
+                "text": "llama-index: Command Injection in LLama-Index CLI in run-llama/llama_index"
+              },
+              "fullDescription": {
+                "text": "LLama-Index CLI version v0.12.20 contains an OS command injection vulnerability. The vulnerability arises from the improper handling of the `--files` argument, which is directly passed into `os.system`. An attacker who controls the content of this argument can inject and execute arbitrary shell commands. This vulnerability can be exploited locally if the attacker has control over the CLI arguments, and remotely if a web application calls the LLama-Index CLI with a user-controlled filename. This issue can lead to arbitrary code execution on the affected system."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "helpUri": "https://avd.aquasec.com/nvd/cve-2025-1753",
+              "help": {
+                "text": "Vulnerability CVE-2025-1753\nSeverity: HIGH\nPackage: llama-index-cli\nFixed Version: 0.4.1\nLink: [CVE-2025-1753](https://avd.aquasec.com/nvd/cve-2025-1753)\nLLama-Index CLI version v0.12.20 contains an OS command injection vulnerability. The vulnerability arises from the improper handling of the `--files` argument, which is directly passed into `os.system`. An attacker who controls the content of this argument can inject and execute arbitrary shell commands. This vulnerability can be exploited locally if the attacker has control over the CLI arguments, and remotely if a web application calls the LLama-Index CLI with a user-controlled filename. This issue can lead to arbitrary code execution on the affected system.",
+                "markdown": "**Vulnerability CVE-2025-1753**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|HIGH|llama-index-cli|0.4.1|[CVE-2025-1753](https://avd.aquasec.com/nvd/cve-2025-1753)|\n\nLLama-Index CLI version v0.12.20 contains an OS command injection vulnerability. The vulnerability arises from the improper handling of the `--files` argument, which is directly passed into `os.system`. An attacker who controls the content of this argument can inject and execute arbitrary shell commands. This vulnerability can be exploited locally if the attacker has control over the CLI arguments, and remotely if a web application calls the LLama-Index CLI with a user-controlled filename. This issue can lead to arbitrary code execution on the affected system."
+              },
+              "properties": {
+                "precision": "very-high",
+                "security-severity": "7.8",
+                "tags": [
+                  "vulnerability",
+                  "security",
+                  "HIGH"
+                ]
+              }
+            },
+            {
               "id": "CVE-2024-39705",
               "name": "LanguageSpecificPackageVulnerability",
               "shortDescription": {
@@ -1616,8 +1805,8 @@
               },
               "helpUri": "https://avd.aquasec.com/nvd/cve-2024-40647",
               "help": {
-                "text": "Vulnerability CVE-2024-40647\nSeverity: LOW\nPackage: sentry-sdk\nFixed Version: 2.8.0\nLink: [CVE-2024-40647](https://avd.aquasec.com/nvd/cve-2024-40647)\nsentry-sdk is the official Python SDK for Sentry.io. A bug in Sentry's Python SDK \u003c 2.8.0 allows the environment variables to be passed to subprocesses despite the `env={}` setting. In Python's `subprocess` calls, all environment variables are passed to subprocesses by default. However, if you specifically do not want them to be passed to subprocesses, you may use `env` argument in `subprocess` calls. Due to the bug in Sentry SDK, with the Stdlib integration enabled (which is enabled by default), this expectation is not fulfilled, and all environment variables are being passed to subprocesses instead. The issue has been patched in pull request #3251 and is included in sentry-sdk==2.8.0. We strongly recommend upgrading to the latest SDK version. However, if it's not possible, and if passing environment variables to child processes poses a security risk for you, you can disable all default integrations.\n",
-                "markdown": "**Vulnerability CVE-2024-40647**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|LOW|sentry-sdk|2.8.0|[CVE-2024-40647](https://avd.aquasec.com/nvd/cve-2024-40647)|\n\nsentry-sdk is the official Python SDK for Sentry.io. A bug in Sentry's Python SDK \u003c 2.8.0 allows the environment variables to be passed to subprocesses despite the `env={}` setting. In Python's `subprocess` calls, all environment variables are passed to subprocesses by default. However, if you specifically do not want them to be passed to subprocesses, you may use `env` argument in `subprocess` calls. Due to the bug in Sentry SDK, with the Stdlib integration enabled (which is enabled by default), this expectation is not fulfilled, and all environment variables are being passed to subprocesses instead. The issue has been patched in pull request #3251 and is included in sentry-sdk==2.8.0. We strongly recommend upgrading to the latest SDK version. However, if it's not possible, and if passing environment variables to child processes poses a security risk for you, you can disable all default integrations.\n"
+                "text": "Vulnerability CVE-2024-40647\nSeverity: LOW\nPackage: sentry-sdk\nFixed Version: 2.8.0, 1.45.1\nLink: [CVE-2024-40647](https://avd.aquasec.com/nvd/cve-2024-40647)\nsentry-sdk is the official Python SDK for Sentry.io. A bug in Sentry's Python SDK \u003c 2.8.0 allows the environment variables to be passed to subprocesses despite the `env={}` setting. In Python's `subprocess` calls, all environment variables are passed to subprocesses by default. However, if you specifically do not want them to be passed to subprocesses, you may use `env` argument in `subprocess` calls. Due to the bug in Sentry SDK, with the Stdlib integration enabled (which is enabled by default), this expectation is not fulfilled, and all environment variables are being passed to subprocesses instead. The issue has been patched in pull request #3251 and is included in sentry-sdk==2.8.0. We strongly recommend upgrading to the latest SDK version. However, if it's not possible, and if passing environment variables to child processes poses a security risk for you, you can disable all default integrations.\n",
+                "markdown": "**Vulnerability CVE-2024-40647**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|LOW|sentry-sdk|2.8.0, 1.45.1|[CVE-2024-40647](https://avd.aquasec.com/nvd/cve-2024-40647)|\n\nsentry-sdk is the official Python SDK for Sentry.io. A bug in Sentry's Python SDK \u003c 2.8.0 allows the environment variables to be passed to subprocesses despite the `env={}` setting. In Python's `subprocess` calls, all environment variables are passed to subprocesses by default. However, if you specifically do not want them to be passed to subprocesses, you may use `env` argument in `subprocess` calls. Due to the bug in Sentry SDK, with the Stdlib integration enabled (which is enabled by default), this expectation is not fulfilled, and all environment variables are being passed to subprocesses instead. The issue has been patched in pull request #3251 and is included in sentry-sdk==2.8.0. We strongly recommend upgrading to the latest SDK version. However, if it's not possible, and if passing environment variables to child processes poses a security risk for you, you can disable all default integrations.\n"
               },
               "properties": {
                 "precision": "very-high",
@@ -2197,7 +2386,7 @@
               }
             }
           ],
-          "version": "0.60.0"
+          "version": "0.63.0"
         }
       },
       "results": [
@@ -3016,7 +3205,34 @@
           "ruleIndex": 15,
           "level": "error",
           "message": {
-            "text": "Package: tar-fs\nInstalled Version: 2.1.1\nVulnerability CVE-2024-12905\nSeverity: HIGH\nFixed Version: 1.16.4, 2.1.2, 3.0.8\nLink: [CVE-2024-12905](https://avd.aquasec.com/nvd/cve-2024-12905)"
+            "text": "Package: tar-fs\nInstalled Version: 2.1.1\nVulnerability CVE-2024-12905\nSeverity: HIGH\nFixed Version: 1.16.4, 2.1.2, 3.0.7\nLink: [CVE-2024-12905](https://avd.aquasec.com/nvd/cve-2024-12905)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "docs/pnpm-lock.yaml",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "docs/pnpm-lock.yaml: tar-fs@2.1.1"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2025-48387",
+          "ruleIndex": 16,
+          "level": "error",
+          "message": {
+            "text": "Package: tar-fs\nInstalled Version: 2.1.1\nVulnerability CVE-2025-48387\nSeverity: HIGH\nFixed Version: 1.16.5, 2.1.3, 3.0.9\nLink: [CVE-2025-48387](https://avd.aquasec.com/nvd/cve-2025-48387)"
           },
           "locations": [
             {
@@ -3040,7 +3256,7 @@
         },
         {
           "ruleId": "CVE-2024-37890",
-          "ruleIndex": 16,
+          "ruleIndex": 17,
           "level": "error",
           "message": {
             "text": "Package: ws\nInstalled Version: 8.13.0\nVulnerability CVE-2024-37890\nSeverity: HIGH\nFixed Version: 5.2.4, 6.2.3, 7.5.10, 8.17.1\nLink: [CVE-2024-37890](https://avd.aquasec.com/nvd/cve-2024-37890)"
@@ -3067,7 +3283,7 @@
         },
         {
           "ruleId": "CVE-2024-48913",
-          "ruleIndex": 17,
+          "ruleIndex": 18,
           "level": "warning",
           "message": {
             "text": "Package: hono\nInstalled Version: 4.4.12\nVulnerability CVE-2024-48913\nSeverity: MEDIUM\nFixed Version: 4.6.5\nLink: [CVE-2024-48913](https://avd.aquasec.com/nvd/cve-2024-48913)"
@@ -3094,7 +3310,7 @@
         },
         {
           "ruleId": "CVE-2024-43787",
-          "ruleIndex": 18,
+          "ruleIndex": 19,
           "level": "note",
           "message": {
             "text": "Package: hono\nInstalled Version: 4.4.12\nVulnerability CVE-2024-43787\nSeverity: LOW\nFixed Version: 4.5.8\nLink: [CVE-2024-43787](https://avd.aquasec.com/nvd/cve-2024-43787)"
@@ -3148,7 +3364,7 @@
         },
         {
           "ruleId": "CVE-2024-48913",
-          "ruleIndex": 17,
+          "ruleIndex": 18,
           "level": "warning",
           "message": {
             "text": "Package: hono\nInstalled Version: 4.4.12\nVulnerability CVE-2024-48913\nSeverity: MEDIUM\nFixed Version: 4.6.5\nLink: [CVE-2024-48913](https://avd.aquasec.com/nvd/cve-2024-48913)"
@@ -3175,7 +3391,7 @@
         },
         {
           "ruleId": "CVE-2024-43787",
-          "ruleIndex": 18,
+          "ruleIndex": 19,
           "level": "note",
           "message": {
             "text": "Package: hono\nInstalled Version: 4.4.12\nVulnerability CVE-2024-43787\nSeverity: LOW\nFixed Version: 4.5.8\nLink: [CVE-2024-43787](https://avd.aquasec.com/nvd/cve-2024-43787)"
@@ -3202,7 +3418,7 @@
         },
         {
           "ruleId": "CVE-2024-55565",
-          "ruleIndex": 19,
+          "ruleIndex": 20,
           "level": "warning",
           "message": {
             "text": "Package: nanoid\nInstalled Version: 3.3.6\nVulnerability CVE-2024-55565\nSeverity: MEDIUM\nFixed Version: 5.0.9, 3.3.8\nLink: [CVE-2024-55565](https://avd.aquasec.com/nvd/cve-2024-55565)"
@@ -3229,7 +3445,7 @@
         },
         {
           "ruleId": "CVE-2024-55565",
-          "ruleIndex": 19,
+          "ruleIndex": 20,
           "level": "warning",
           "message": {
             "text": "Package: nanoid\nInstalled Version: 3.3.7\nVulnerability CVE-2024-55565\nSeverity: MEDIUM\nFixed Version: 5.0.9, 3.3.8\nLink: [CVE-2024-55565](https://avd.aquasec.com/nvd/cve-2024-55565)"
@@ -3259,7 +3475,34 @@
           "ruleIndex": 15,
           "level": "error",
           "message": {
-            "text": "Package: tar-fs\nInstalled Version: 2.0.1\nVulnerability CVE-2024-12905\nSeverity: HIGH\nFixed Version: 1.16.4, 2.1.2, 3.0.8\nLink: [CVE-2024-12905](https://avd.aquasec.com/nvd/cve-2024-12905)"
+            "text": "Package: tar-fs\nInstalled Version: 2.0.1\nVulnerability CVE-2024-12905\nSeverity: HIGH\nFixed Version: 1.16.4, 2.1.2, 3.0.7\nLink: [CVE-2024-12905](https://avd.aquasec.com/nvd/cve-2024-12905)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "js/examples/cloudflare-openai/pnpm-lock.yaml",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "js/examples/cloudflare-openai/pnpm-lock.yaml: tar-fs@2.0.1"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2025-48387",
+          "ruleIndex": 16,
+          "level": "error",
+          "message": {
+            "text": "Package: tar-fs\nInstalled Version: 2.0.1\nVulnerability CVE-2025-48387\nSeverity: HIGH\nFixed Version: 1.16.5, 2.1.3, 3.0.9\nLink: [CVE-2025-48387](https://avd.aquasec.com/nvd/cve-2025-48387)"
           },
           "locations": [
             {
@@ -3337,7 +3580,7 @@
         },
         {
           "ruleId": "CVE-2024-48913",
-          "ruleIndex": 17,
+          "ruleIndex": 18,
           "level": "warning",
           "message": {
             "text": "Package: hono\nInstalled Version: 4.5.10\nVulnerability CVE-2024-48913\nSeverity: MEDIUM\nFixed Version: 4.6.5\nLink: [CVE-2024-48913](https://avd.aquasec.com/nvd/cve-2024-48913)"
@@ -3364,7 +3607,7 @@
         },
         {
           "ruleId": "CVE-2024-7774",
-          "ruleIndex": 20,
+          "ruleIndex": 21,
           "level": "warning",
           "message": {
             "text": "Package: langchain\nInstalled Version: 0.2.10\nVulnerability CVE-2024-7774\nSeverity: MEDIUM\nFixed Version: 0.2.19\nLink: [CVE-2024-7774](https://avd.aquasec.com/nvd/cve-2024-7774)"
@@ -3394,7 +3637,34 @@
           "ruleIndex": 15,
           "level": "error",
           "message": {
-            "text": "Package: tar-fs\nInstalled Version: 2.0.1\nVulnerability CVE-2024-12905\nSeverity: HIGH\nFixed Version: 1.16.4, 2.1.2, 3.0.8\nLink: [CVE-2024-12905](https://avd.aquasec.com/nvd/cve-2024-12905)"
+            "text": "Package: tar-fs\nInstalled Version: 2.0.1\nVulnerability CVE-2024-12905\nSeverity: HIGH\nFixed Version: 1.16.4, 2.1.2, 3.0.7\nLink: [CVE-2024-12905](https://avd.aquasec.com/nvd/cve-2024-12905)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "js/examples/docs-example/calendar_agent/package-lock.json",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 1338,
+                  "startColumn": 1,
+                  "endLine": 1348,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "js/examples/docs-example/calendar_agent/package-lock.json: tar-fs@2.0.1"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2025-48387",
+          "ruleIndex": 16,
+          "level": "error",
+          "message": {
+            "text": "Package: tar-fs\nInstalled Version: 2.0.1\nVulnerability CVE-2025-48387\nSeverity: HIGH\nFixed Version: 1.16.5, 2.1.3, 3.0.9\nLink: [CVE-2025-48387](https://avd.aquasec.com/nvd/cve-2025-48387)"
           },
           "locations": [
             {
@@ -3472,7 +3742,7 @@
         },
         {
           "ruleId": "CVE-2024-48913",
-          "ruleIndex": 17,
+          "ruleIndex": 18,
           "level": "warning",
           "message": {
             "text": "Package: hono\nInstalled Version: 4.5.10\nVulnerability CVE-2024-48913\nSeverity: MEDIUM\nFixed Version: 4.6.5\nLink: [CVE-2024-48913](https://avd.aquasec.com/nvd/cve-2024-48913)"
@@ -3499,7 +3769,7 @@
         },
         {
           "ruleId": "CVE-2024-7774",
-          "ruleIndex": 20,
+          "ruleIndex": 21,
           "level": "warning",
           "message": {
             "text": "Package: langchain\nInstalled Version: 0.2.10\nVulnerability CVE-2024-7774\nSeverity: MEDIUM\nFixed Version: 0.2.19\nLink: [CVE-2024-7774](https://avd.aquasec.com/nvd/cve-2024-7774)"
@@ -3529,7 +3799,34 @@
           "ruleIndex": 15,
           "level": "error",
           "message": {
-            "text": "Package: tar-fs\nInstalled Version: 2.0.1\nVulnerability CVE-2024-12905\nSeverity: HIGH\nFixed Version: 1.16.4, 2.1.2, 3.0.8\nLink: [CVE-2024-12905](https://avd.aquasec.com/nvd/cve-2024-12905)"
+            "text": "Package: tar-fs\nInstalled Version: 2.0.1\nVulnerability CVE-2024-12905\nSeverity: HIGH\nFixed Version: 1.16.4, 2.1.2, 3.0.7\nLink: [CVE-2024-12905](https://avd.aquasec.com/nvd/cve-2024-12905)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "js/examples/docs-example/code_execution_agent/package-lock.json",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 1338,
+                  "startColumn": 1,
+                  "endLine": 1348,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "js/examples/docs-example/code_execution_agent/package-lock.json: tar-fs@2.0.1"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2025-48387",
+          "ruleIndex": 16,
+          "level": "error",
+          "message": {
+            "text": "Package: tar-fs\nInstalled Version: 2.0.1\nVulnerability CVE-2025-48387\nSeverity: HIGH\nFixed Version: 1.16.5, 2.1.3, 3.0.9\nLink: [CVE-2025-48387](https://avd.aquasec.com/nvd/cve-2025-48387)"
           },
           "locations": [
             {
@@ -3580,7 +3877,7 @@
         },
         {
           "ruleId": "CVE-2024-48913",
-          "ruleIndex": 17,
+          "ruleIndex": 18,
           "level": "warning",
           "message": {
             "text": "Package: hono\nInstalled Version: 4.5.1\nVulnerability CVE-2024-48913\nSeverity: MEDIUM\nFixed Version: 4.6.5\nLink: [CVE-2024-48913](https://avd.aquasec.com/nvd/cve-2024-48913)"
@@ -3607,7 +3904,7 @@
         },
         {
           "ruleId": "CVE-2024-43787",
-          "ruleIndex": 18,
+          "ruleIndex": 19,
           "level": "note",
           "message": {
             "text": "Package: hono\nInstalled Version: 4.5.1\nVulnerability CVE-2024-43787\nSeverity: LOW\nFixed Version: 4.5.8\nLink: [CVE-2024-43787](https://avd.aquasec.com/nvd/cve-2024-43787)"
@@ -3634,7 +3931,7 @@
         },
         {
           "ruleId": "CVE-2024-7774",
-          "ruleIndex": 20,
+          "ruleIndex": 21,
           "level": "warning",
           "message": {
             "text": "Package: langchain\nInstalled Version: 0.2.10\nVulnerability CVE-2024-7774\nSeverity: MEDIUM\nFixed Version: 0.2.19\nLink: [CVE-2024-7774](https://avd.aquasec.com/nvd/cve-2024-7774)"
@@ -3664,7 +3961,34 @@
           "ruleIndex": 15,
           "level": "error",
           "message": {
-            "text": "Package: tar-fs\nInstalled Version: 2.0.1\nVulnerability CVE-2024-12905\nSeverity: HIGH\nFixed Version: 1.16.4, 2.1.2, 3.0.8\nLink: [CVE-2024-12905](https://avd.aquasec.com/nvd/cve-2024-12905)"
+            "text": "Package: tar-fs\nInstalled Version: 2.0.1\nVulnerability CVE-2024-12905\nSeverity: HIGH\nFixed Version: 1.16.4, 2.1.2, 3.0.7\nLink: [CVE-2024-12905](https://avd.aquasec.com/nvd/cve-2024-12905)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "js/examples/docs-example/investment_analyst/package-lock.json",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 1338,
+                  "startColumn": 1,
+                  "endLine": 1348,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "js/examples/docs-example/investment_analyst/package-lock.json: tar-fs@2.0.1"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2025-48387",
+          "ruleIndex": 16,
+          "level": "error",
+          "message": {
+            "text": "Package: tar-fs\nInstalled Version: 2.0.1\nVulnerability CVE-2025-48387\nSeverity: HIGH\nFixed Version: 1.16.5, 2.1.3, 3.0.9\nLink: [CVE-2025-48387](https://avd.aquasec.com/nvd/cve-2025-48387)"
           },
           "locations": [
             {
@@ -3742,7 +4066,7 @@
         },
         {
           "ruleId": "CVE-2024-48913",
-          "ruleIndex": 17,
+          "ruleIndex": 18,
           "level": "warning",
           "message": {
             "text": "Package: hono\nInstalled Version: 4.5.1\nVulnerability CVE-2024-48913\nSeverity: MEDIUM\nFixed Version: 4.6.5\nLink: [CVE-2024-48913](https://avd.aquasec.com/nvd/cve-2024-48913)"
@@ -3769,7 +4093,7 @@
         },
         {
           "ruleId": "CVE-2024-43787",
-          "ruleIndex": 18,
+          "ruleIndex": 19,
           "level": "note",
           "message": {
             "text": "Package: hono\nInstalled Version: 4.5.1\nVulnerability CVE-2024-43787\nSeverity: LOW\nFixed Version: 4.5.8\nLink: [CVE-2024-43787](https://avd.aquasec.com/nvd/cve-2024-43787)"
@@ -3796,7 +4120,7 @@
         },
         {
           "ruleId": "CVE-2024-7774",
-          "ruleIndex": 20,
+          "ruleIndex": 21,
           "level": "warning",
           "message": {
             "text": "Package: langchain\nInstalled Version: 0.2.10\nVulnerability CVE-2024-7774\nSeverity: MEDIUM\nFixed Version: 0.2.19\nLink: [CVE-2024-7774](https://avd.aquasec.com/nvd/cve-2024-7774)"
@@ -3826,7 +4150,34 @@
           "ruleIndex": 15,
           "level": "error",
           "message": {
-            "text": "Package: tar-fs\nInstalled Version: 2.0.1\nVulnerability CVE-2024-12905\nSeverity: HIGH\nFixed Version: 1.16.4, 2.1.2, 3.0.8\nLink: [CVE-2024-12905](https://avd.aquasec.com/nvd/cve-2024-12905)"
+            "text": "Package: tar-fs\nInstalled Version: 2.0.1\nVulnerability CVE-2024-12905\nSeverity: HIGH\nFixed Version: 1.16.4, 2.1.2, 3.0.7\nLink: [CVE-2024-12905](https://avd.aquasec.com/nvd/cve-2024-12905)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "js/examples/docs-example/rag_tool_agent/package-lock.json",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 1338,
+                  "startColumn": 1,
+                  "endLine": 1348,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "js/examples/docs-example/rag_tool_agent/package-lock.json: tar-fs@2.0.1"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2025-48387",
+          "ruleIndex": 16,
+          "level": "error",
+          "message": {
+            "text": "Package: tar-fs\nInstalled Version: 2.0.1\nVulnerability CVE-2025-48387\nSeverity: HIGH\nFixed Version: 1.16.5, 2.1.3, 3.0.9\nLink: [CVE-2025-48387](https://avd.aquasec.com/nvd/cve-2025-48387)"
           },
           "locations": [
             {
@@ -4066,7 +4417,7 @@
         },
         {
           "ruleId": "CVE-2024-55565",
-          "ruleIndex": 19,
+          "ruleIndex": 20,
           "level": "warning",
           "message": {
             "text": "Package: nanoid\nInstalled Version: 3.3.6\nVulnerability CVE-2024-55565\nSeverity: MEDIUM\nFixed Version: 5.0.9, 3.3.8\nLink: [CVE-2024-55565](https://avd.aquasec.com/nvd/cve-2024-55565)"
@@ -4093,7 +4444,7 @@
         },
         {
           "ruleId": "CVE-2024-55565",
-          "ruleIndex": 19,
+          "ruleIndex": 20,
           "level": "warning",
           "message": {
             "text": "Package: nanoid\nInstalled Version: 3.3.7\nVulnerability CVE-2024-55565\nSeverity: MEDIUM\nFixed Version: 5.0.9, 3.3.8\nLink: [CVE-2024-55565](https://avd.aquasec.com/nvd/cve-2024-55565)"
@@ -4225,7 +4576,34 @@
           "ruleIndex": 15,
           "level": "error",
           "message": {
-            "text": "Package: tar-fs\nInstalled Version: 2.0.1\nVulnerability CVE-2024-12905\nSeverity: HIGH\nFixed Version: 1.16.4, 2.1.2, 3.0.8\nLink: [CVE-2024-12905](https://avd.aquasec.com/nvd/cve-2024-12905)"
+            "text": "Package: tar-fs\nInstalled Version: 2.0.1\nVulnerability CVE-2024-12905\nSeverity: HIGH\nFixed Version: 1.16.4, 2.1.2, 3.0.7\nLink: [CVE-2024-12905](https://avd.aquasec.com/nvd/cve-2024-12905)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "js/examples/lead_generator_agent/package-lock.json",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 3140,
+                  "startColumn": 1,
+                  "endLine": 3150,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "js/examples/lead_generator_agent/package-lock.json: tar-fs@2.0.1"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2025-48387",
+          "ruleIndex": 16,
+          "level": "error",
+          "message": {
+            "text": "Package: tar-fs\nInstalled Version: 2.0.1\nVulnerability CVE-2025-48387\nSeverity: HIGH\nFixed Version: 1.16.5, 2.1.3, 3.0.9\nLink: [CVE-2025-48387](https://avd.aquasec.com/nvd/cve-2025-48387)"
           },
           "locations": [
             {
@@ -4276,7 +4654,7 @@
         },
         {
           "ruleId": "CVE-2024-55565",
-          "ruleIndex": 19,
+          "ruleIndex": 20,
           "level": "warning",
           "message": {
             "text": "Package: nanoid\nInstalled Version: 3.3.6\nVulnerability CVE-2024-55565\nSeverity: MEDIUM\nFixed Version: 5.0.9, 3.3.8\nLink: [CVE-2024-55565](https://avd.aquasec.com/nvd/cve-2024-55565)"
@@ -4303,7 +4681,7 @@
         },
         {
           "ruleId": "CVE-2024-55565",
-          "ruleIndex": 19,
+          "ruleIndex": 20,
           "level": "warning",
           "message": {
             "text": "Package: nanoid\nInstalled Version: 3.3.7\nVulnerability CVE-2024-55565\nSeverity: MEDIUM\nFixed Version: 5.0.9, 3.3.8\nLink: [CVE-2024-55565](https://avd.aquasec.com/nvd/cve-2024-55565)"
@@ -4330,7 +4708,7 @@
         },
         {
           "ruleId": "CVE-2024-45047",
-          "ruleIndex": 21,
+          "ruleIndex": 22,
           "level": "warning",
           "message": {
             "text": "Package: svelte\nInstalled Version: 4.2.18\nVulnerability CVE-2024-45047\nSeverity: MEDIUM\nFixed Version: 4.2.19\nLink: [CVE-2024-45047](https://avd.aquasec.com/nvd/cve-2024-45047)"
@@ -4360,7 +4738,34 @@
           "ruleIndex": 15,
           "level": "error",
           "message": {
-            "text": "Package: tar-fs\nInstalled Version: 2.0.1\nVulnerability CVE-2024-12905\nSeverity: HIGH\nFixed Version: 1.16.4, 2.1.2, 3.0.8\nLink: [CVE-2024-12905](https://avd.aquasec.com/nvd/cve-2024-12905)"
+            "text": "Package: tar-fs\nInstalled Version: 2.0.1\nVulnerability CVE-2024-12905\nSeverity: HIGH\nFixed Version: 1.16.4, 2.1.2, 3.0.7\nLink: [CVE-2024-12905](https://avd.aquasec.com/nvd/cve-2024-12905)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "js/examples/lead_generator_agent/pnpm-lock.yaml",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "js/examples/lead_generator_agent/pnpm-lock.yaml: tar-fs@2.0.1"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2025-48387",
+          "ruleIndex": 16,
+          "level": "error",
+          "message": {
+            "text": "Package: tar-fs\nInstalled Version: 2.0.1\nVulnerability CVE-2025-48387\nSeverity: HIGH\nFixed Version: 1.16.5, 2.1.3, 3.0.9\nLink: [CVE-2025-48387](https://avd.aquasec.com/nvd/cve-2025-48387)"
           },
           "locations": [
             {
@@ -4411,7 +4816,7 @@
         },
         {
           "ruleId": "CVE-2024-55565",
-          "ruleIndex": 19,
+          "ruleIndex": 20,
           "level": "warning",
           "message": {
             "text": "Package: nanoid\nInstalled Version: 3.3.6\nVulnerability CVE-2024-55565\nSeverity: MEDIUM\nFixed Version: 5.0.9, 3.3.8\nLink: [CVE-2024-55565](https://avd.aquasec.com/nvd/cve-2024-55565)"
@@ -4468,7 +4873,34 @@
           "ruleIndex": 15,
           "level": "error",
           "message": {
-            "text": "Package: tar-fs\nInstalled Version: 2.0.1\nVulnerability CVE-2024-12905\nSeverity: HIGH\nFixed Version: 1.16.4, 2.1.2, 3.0.8\nLink: [CVE-2024-12905](https://avd.aquasec.com/nvd/cve-2024-12905)"
+            "text": "Package: tar-fs\nInstalled Version: 2.0.1\nVulnerability CVE-2024-12905\nSeverity: HIGH\nFixed Version: 1.16.4, 2.1.2, 3.0.7\nLink: [CVE-2024-12905](https://avd.aquasec.com/nvd/cve-2024-12905)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "js/examples/lead_outreach_agent/pnpm-lock.yaml",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "js/examples/lead_outreach_agent/pnpm-lock.yaml: tar-fs@2.0.1"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2025-48387",
+          "ruleIndex": 16,
+          "level": "error",
+          "message": {
+            "text": "Package: tar-fs\nInstalled Version: 2.0.1\nVulnerability CVE-2025-48387\nSeverity: HIGH\nFixed Version: 1.16.5, 2.1.3, 3.0.9\nLink: [CVE-2025-48387](https://avd.aquasec.com/nvd/cve-2025-48387)"
           },
           "locations": [
             {
@@ -4519,7 +4951,7 @@
         },
         {
           "ruleId": "CVE-2024-55565",
-          "ruleIndex": 19,
+          "ruleIndex": 20,
           "level": "warning",
           "message": {
             "text": "Package: nanoid\nInstalled Version: 3.3.6\nVulnerability CVE-2024-55565\nSeverity: MEDIUM\nFixed Version: 5.0.9, 3.3.8\nLink: [CVE-2024-55565](https://avd.aquasec.com/nvd/cve-2024-55565)"
@@ -4546,7 +4978,7 @@
         },
         {
           "ruleId": "CVE-2024-55565",
-          "ruleIndex": 19,
+          "ruleIndex": 20,
           "level": "warning",
           "message": {
             "text": "Package: nanoid\nInstalled Version: 3.3.7\nVulnerability CVE-2024-55565\nSeverity: MEDIUM\nFixed Version: 5.0.9, 3.3.8\nLink: [CVE-2024-55565](https://avd.aquasec.com/nvd/cve-2024-55565)"
@@ -4678,7 +5110,34 @@
           "ruleIndex": 15,
           "level": "error",
           "message": {
-            "text": "Package: tar-fs\nInstalled Version: 2.0.1\nVulnerability CVE-2024-12905\nSeverity: HIGH\nFixed Version: 1.16.4, 2.1.2, 3.0.8\nLink: [CVE-2024-12905](https://avd.aquasec.com/nvd/cve-2024-12905)"
+            "text": "Package: tar-fs\nInstalled Version: 2.0.1\nVulnerability CVE-2024-12905\nSeverity: HIGH\nFixed Version: 1.16.4, 2.1.2, 3.0.7\nLink: [CVE-2024-12905](https://avd.aquasec.com/nvd/cve-2024-12905)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "js/examples/meeting_brief_agent/package-lock.json",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 3140,
+                  "startColumn": 1,
+                  "endLine": 3150,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "js/examples/meeting_brief_agent/package-lock.json: tar-fs@2.0.1"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2025-48387",
+          "ruleIndex": 16,
+          "level": "error",
+          "message": {
+            "text": "Package: tar-fs\nInstalled Version: 2.0.1\nVulnerability CVE-2025-48387\nSeverity: HIGH\nFixed Version: 1.16.5, 2.1.3, 3.0.9\nLink: [CVE-2025-48387](https://avd.aquasec.com/nvd/cve-2025-48387)"
           },
           "locations": [
             {
@@ -4783,7 +5242,7 @@
         },
         {
           "ruleId": "CVE-2024-48913",
-          "ruleIndex": 17,
+          "ruleIndex": 18,
           "level": "warning",
           "message": {
             "text": "Package: hono\nInstalled Version: 4.5.9\nVulnerability CVE-2024-48913\nSeverity: MEDIUM\nFixed Version: 4.6.5\nLink: [CVE-2024-48913](https://avd.aquasec.com/nvd/cve-2024-48913)"
@@ -4810,7 +5269,7 @@
         },
         {
           "ruleId": "CVE-2024-7774",
-          "ruleIndex": 20,
+          "ruleIndex": 21,
           "level": "warning",
           "message": {
             "text": "Package: langchain\nInstalled Version: 0.2.17\nVulnerability CVE-2024-7774\nSeverity: MEDIUM\nFixed Version: 0.2.19\nLink: [CVE-2024-7774](https://avd.aquasec.com/nvd/cve-2024-7774)"
@@ -4840,7 +5299,34 @@
           "ruleIndex": 15,
           "level": "error",
           "message": {
-            "text": "Package: tar-fs\nInstalled Version: 2.0.1\nVulnerability CVE-2024-12905\nSeverity: HIGH\nFixed Version: 1.16.4, 2.1.2, 3.0.8\nLink: [CVE-2024-12905](https://avd.aquasec.com/nvd/cve-2024-12905)"
+            "text": "Package: tar-fs\nInstalled Version: 2.0.1\nVulnerability CVE-2024-12905\nSeverity: HIGH\nFixed Version: 1.16.4, 2.1.2, 3.0.7\nLink: [CVE-2024-12905](https://avd.aquasec.com/nvd/cve-2024-12905)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "js/examples/newsletter_summarizer/newsletter_summarizer_cloudflare/package-lock.json",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 2402,
+                  "startColumn": 1,
+                  "endLine": 2412,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "js/examples/newsletter_summarizer/newsletter_summarizer_cloudflare/package-lock.json: tar-fs@2.0.1"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2025-48387",
+          "ruleIndex": 16,
+          "level": "error",
+          "message": {
+            "text": "Package: tar-fs\nInstalled Version: 2.0.1\nVulnerability CVE-2025-48387\nSeverity: HIGH\nFixed Version: 1.16.5, 2.1.3, 3.0.9\nLink: [CVE-2025-48387](https://avd.aquasec.com/nvd/cve-2025-48387)"
           },
           "locations": [
             {
@@ -4891,7 +5377,7 @@
         },
         {
           "ruleId": "CVE-2024-48913",
-          "ruleIndex": 17,
+          "ruleIndex": 18,
           "level": "warning",
           "message": {
             "text": "Package: hono\nInstalled Version: 4.6.3\nVulnerability CVE-2024-48913\nSeverity: MEDIUM\nFixed Version: 4.6.5\nLink: [CVE-2024-48913](https://avd.aquasec.com/nvd/cve-2024-48913)"
@@ -4921,7 +5407,34 @@
           "ruleIndex": 15,
           "level": "error",
           "message": {
-            "text": "Package: tar-fs\nInstalled Version: 2.0.1\nVulnerability CVE-2024-12905\nSeverity: HIGH\nFixed Version: 1.16.4, 2.1.2, 3.0.8\nLink: [CVE-2024-12905](https://avd.aquasec.com/nvd/cve-2024-12905)"
+            "text": "Package: tar-fs\nInstalled Version: 2.0.1\nVulnerability CVE-2024-12905\nSeverity: HIGH\nFixed Version: 1.16.4, 2.1.2, 3.0.7\nLink: [CVE-2024-12905](https://avd.aquasec.com/nvd/cve-2024-12905)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "js/examples/newsletter_summarizer/newsletter_summarizer_cloudflare/pnpm-lock.yaml",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "js/examples/newsletter_summarizer/newsletter_summarizer_cloudflare/pnpm-lock.yaml: tar-fs@2.0.1"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2025-48387",
+          "ruleIndex": 16,
+          "level": "error",
+          "message": {
+            "text": "Package: tar-fs\nInstalled Version: 2.0.1\nVulnerability CVE-2025-48387\nSeverity: HIGH\nFixed Version: 1.16.5, 2.1.3, 3.0.9\nLink: [CVE-2025-48387](https://avd.aquasec.com/nvd/cve-2025-48387)"
           },
           "locations": [
             {
@@ -5080,7 +5593,7 @@
         },
         {
           "ruleId": "CVE-2024-7774",
-          "ruleIndex": 20,
+          "ruleIndex": 21,
           "level": "warning",
           "message": {
             "text": "Package: langchain\nInstalled Version: 0.2.8\nVulnerability CVE-2024-7774\nSeverity: MEDIUM\nFixed Version: 0.2.19\nLink: [CVE-2024-7774](https://avd.aquasec.com/nvd/cve-2024-7774)"
@@ -5242,7 +5755,7 @@
         },
         {
           "ruleId": "CVE-2024-55565",
-          "ruleIndex": 19,
+          "ruleIndex": 20,
           "level": "warning",
           "message": {
             "text": "Package: nanoid\nInstalled Version: 3.3.6\nVulnerability CVE-2024-55565\nSeverity: MEDIUM\nFixed Version: 5.0.9, 3.3.8\nLink: [CVE-2024-55565](https://avd.aquasec.com/nvd/cve-2024-55565)"
@@ -5269,7 +5782,7 @@
         },
         {
           "ruleId": "CVE-2024-55565",
-          "ruleIndex": 19,
+          "ruleIndex": 20,
           "level": "warning",
           "message": {
             "text": "Package: nanoid\nInstalled Version: 3.3.7\nVulnerability CVE-2024-55565\nSeverity: MEDIUM\nFixed Version: 5.0.9, 3.3.8\nLink: [CVE-2024-55565](https://avd.aquasec.com/nvd/cve-2024-55565)"
@@ -5299,7 +5812,34 @@
           "ruleIndex": 15,
           "level": "error",
           "message": {
-            "text": "Package: tar-fs\nInstalled Version: 2.0.1\nVulnerability CVE-2024-12905\nSeverity: HIGH\nFixed Version: 1.16.4, 2.1.2, 3.0.8\nLink: [CVE-2024-12905](https://avd.aquasec.com/nvd/cve-2024-12905)"
+            "text": "Package: tar-fs\nInstalled Version: 2.0.1\nVulnerability CVE-2024-12905\nSeverity: HIGH\nFixed Version: 1.16.4, 2.1.2, 3.0.7\nLink: [CVE-2024-12905](https://avd.aquasec.com/nvd/cve-2024-12905)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "js/examples/portfolio-generator/pnpm-lock.yaml",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "js/examples/portfolio-generator/pnpm-lock.yaml: tar-fs@2.0.1"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2025-48387",
+          "ruleIndex": 16,
+          "level": "error",
+          "message": {
+            "text": "Package: tar-fs\nInstalled Version: 2.0.1\nVulnerability CVE-2025-48387\nSeverity: HIGH\nFixed Version: 1.16.5, 2.1.3, 3.0.9\nLink: [CVE-2025-48387](https://avd.aquasec.com/nvd/cve-2025-48387)"
           },
           "locations": [
             {
@@ -5404,7 +5944,7 @@
         },
         {
           "ruleId": "CVE-2024-55565",
-          "ruleIndex": 19,
+          "ruleIndex": 20,
           "level": "warning",
           "message": {
             "text": "Package: nanoid\nInstalled Version: 3.3.6\nVulnerability CVE-2024-55565\nSeverity: MEDIUM\nFixed Version: 5.0.9, 3.3.8\nLink: [CVE-2024-55565](https://avd.aquasec.com/nvd/cve-2024-55565)"
@@ -5431,7 +5971,7 @@
         },
         {
           "ruleId": "CVE-2024-55565",
-          "ruleIndex": 19,
+          "ruleIndex": 20,
           "level": "warning",
           "message": {
             "text": "Package: nanoid\nInstalled Version: 3.3.7\nVulnerability CVE-2024-55565\nSeverity: MEDIUM\nFixed Version: 5.0.9, 3.3.8\nLink: [CVE-2024-55565](https://avd.aquasec.com/nvd/cve-2024-55565)"
@@ -5461,7 +6001,34 @@
           "ruleIndex": 15,
           "level": "error",
           "message": {
-            "text": "Package: tar-fs\nInstalled Version: 2.0.1\nVulnerability CVE-2024-12905\nSeverity: HIGH\nFixed Version: 1.16.4, 2.1.2, 3.0.8\nLink: [CVE-2024-12905](https://avd.aquasec.com/nvd/cve-2024-12905)"
+            "text": "Package: tar-fs\nInstalled Version: 2.0.1\nVulnerability CVE-2024-12905\nSeverity: HIGH\nFixed Version: 1.16.4, 2.1.2, 3.0.7\nLink: [CVE-2024-12905](https://avd.aquasec.com/nvd/cve-2024-12905)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "js/examples/reddit-research/pnpm-lock.yaml",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "js/examples/reddit-research/pnpm-lock.yaml: tar-fs@2.0.1"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2025-48387",
+          "ruleIndex": 16,
+          "level": "error",
+          "message": {
+            "text": "Package: tar-fs\nInstalled Version: 2.0.1\nVulnerability CVE-2025-48387\nSeverity: HIGH\nFixed Version: 1.16.5, 2.1.3, 3.0.9\nLink: [CVE-2025-48387](https://avd.aquasec.com/nvd/cve-2025-48387)"
           },
           "locations": [
             {
@@ -5512,7 +6079,7 @@
         },
         {
           "ruleId": "CVE-2024-55565",
-          "ruleIndex": 19,
+          "ruleIndex": 20,
           "level": "warning",
           "message": {
             "text": "Package: nanoid\nInstalled Version: 3.3.6\nVulnerability CVE-2024-55565\nSeverity: MEDIUM\nFixed Version: 5.0.9, 3.3.8\nLink: [CVE-2024-55565](https://avd.aquasec.com/nvd/cve-2024-55565)"
@@ -5539,7 +6106,7 @@
         },
         {
           "ruleId": "CVE-2024-55565",
-          "ruleIndex": 19,
+          "ruleIndex": 20,
           "level": "warning",
           "message": {
             "text": "Package: nanoid\nInstalled Version: 3.3.7\nVulnerability CVE-2024-55565\nSeverity: MEDIUM\nFixed Version: 5.0.9, 3.3.8\nLink: [CVE-2024-55565](https://avd.aquasec.com/nvd/cve-2024-55565)"
@@ -5569,7 +6136,34 @@
           "ruleIndex": 15,
           "level": "error",
           "message": {
-            "text": "Package: tar-fs\nInstalled Version: 2.0.1\nVulnerability CVE-2024-12905\nSeverity: HIGH\nFixed Version: 1.16.4, 2.1.2, 3.0.8\nLink: [CVE-2024-12905](https://avd.aquasec.com/nvd/cve-2024-12905)"
+            "text": "Package: tar-fs\nInstalled Version: 2.0.1\nVulnerability CVE-2024-12905\nSeverity: HIGH\nFixed Version: 1.16.4, 2.1.2, 3.0.7\nLink: [CVE-2024-12905](https://avd.aquasec.com/nvd/cve-2024-12905)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "js/examples/report-template-generator-agent/pnpm-lock.yaml",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "js/examples/report-template-generator-agent/pnpm-lock.yaml: tar-fs@2.0.1"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2025-48387",
+          "ruleIndex": 16,
+          "level": "error",
+          "message": {
+            "text": "Package: tar-fs\nInstalled Version: 2.0.1\nVulnerability CVE-2025-48387\nSeverity: HIGH\nFixed Version: 1.16.5, 2.1.3, 3.0.9\nLink: [CVE-2025-48387](https://avd.aquasec.com/nvd/cve-2025-48387)"
           },
           "locations": [
             {
@@ -5620,7 +6214,7 @@
         },
         {
           "ruleId": "CVE-2024-55565",
-          "ruleIndex": 19,
+          "ruleIndex": 20,
           "level": "warning",
           "message": {
             "text": "Package: nanoid\nInstalled Version: 3.3.6\nVulnerability CVE-2024-55565\nSeverity: MEDIUM\nFixed Version: 5.0.9, 3.3.8\nLink: [CVE-2024-55565](https://avd.aquasec.com/nvd/cve-2024-55565)"
@@ -5647,7 +6241,7 @@
         },
         {
           "ruleId": "CVE-2024-55565",
-          "ruleIndex": 19,
+          "ruleIndex": 20,
           "level": "warning",
           "message": {
             "text": "Package: nanoid\nInstalled Version: 3.3.7\nVulnerability CVE-2024-55565\nSeverity: MEDIUM\nFixed Version: 5.0.9, 3.3.8\nLink: [CVE-2024-55565](https://avd.aquasec.com/nvd/cve-2024-55565)"
@@ -5779,7 +6373,34 @@
           "ruleIndex": 15,
           "level": "error",
           "message": {
-            "text": "Package: tar-fs\nInstalled Version: 2.0.1\nVulnerability CVE-2024-12905\nSeverity: HIGH\nFixed Version: 1.16.4, 2.1.2, 3.0.8\nLink: [CVE-2024-12905](https://avd.aquasec.com/nvd/cve-2024-12905)"
+            "text": "Package: tar-fs\nInstalled Version: 2.0.1\nVulnerability CVE-2024-12905\nSeverity: HIGH\nFixed Version: 1.16.4, 2.1.2, 3.0.7\nLink: [CVE-2024-12905](https://avd.aquasec.com/nvd/cve-2024-12905)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "js/examples/scheduling-agent/package-lock.json",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 3140,
+                  "startColumn": 1,
+                  "endLine": 3150,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "js/examples/scheduling-agent/package-lock.json: tar-fs@2.0.1"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2025-48387",
+          "ruleIndex": 16,
+          "level": "error",
+          "message": {
+            "text": "Package: tar-fs\nInstalled Version: 2.0.1\nVulnerability CVE-2025-48387\nSeverity: HIGH\nFixed Version: 1.16.5, 2.1.3, 3.0.9\nLink: [CVE-2025-48387](https://avd.aquasec.com/nvd/cve-2025-48387)"
           },
           "locations": [
             {
@@ -5830,7 +6451,7 @@
         },
         {
           "ruleId": "CVE-2024-55565",
-          "ruleIndex": 19,
+          "ruleIndex": 20,
           "level": "warning",
           "message": {
             "text": "Package: nanoid\nInstalled Version: 3.3.6\nVulnerability CVE-2024-55565\nSeverity: MEDIUM\nFixed Version: 5.0.9, 3.3.8\nLink: [CVE-2024-55565](https://avd.aquasec.com/nvd/cve-2024-55565)"
@@ -5857,7 +6478,7 @@
         },
         {
           "ruleId": "CVE-2024-55565",
-          "ruleIndex": 19,
+          "ruleIndex": 20,
           "level": "warning",
           "message": {
             "text": "Package: nanoid\nInstalled Version: 3.3.7\nVulnerability CVE-2024-55565\nSeverity: MEDIUM\nFixed Version: 5.0.9, 3.3.8\nLink: [CVE-2024-55565](https://avd.aquasec.com/nvd/cve-2024-55565)"
@@ -5887,7 +6508,7 @@
           "ruleIndex": 15,
           "level": "error",
           "message": {
-            "text": "Package: tar-fs\nInstalled Version: 2.0.1\nVulnerability CVE-2024-12905\nSeverity: HIGH\nFixed Version: 1.16.4, 2.1.2, 3.0.8\nLink: [CVE-2024-12905](https://avd.aquasec.com/nvd/cve-2024-12905)"
+            "text": "Package: tar-fs\nInstalled Version: 2.0.1\nVulnerability CVE-2024-12905\nSeverity: HIGH\nFixed Version: 1.16.4, 2.1.2, 3.0.7\nLink: [CVE-2024-12905](https://avd.aquasec.com/nvd/cve-2024-12905)"
           },
           "locations": [
             {
@@ -5910,8 +6531,62 @@
           ]
         },
         {
+          "ruleId": "CVE-2025-48387",
+          "ruleIndex": 16,
+          "level": "error",
+          "message": {
+            "text": "Package: tar-fs\nInstalled Version: 2.0.1\nVulnerability CVE-2025-48387\nSeverity: HIGH\nFixed Version: 1.16.5, 2.1.3, 3.0.9\nLink: [CVE-2025-48387](https://avd.aquasec.com/nvd/cve-2025-48387)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "js/examples/scheduling-agent/pnpm-lock.yaml",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "js/examples/scheduling-agent/pnpm-lock.yaml: tar-fs@2.0.1"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2025-5889",
+          "ruleIndex": 23,
+          "level": "note",
+          "message": {
+            "text": "Package: brace-expansion\nInstalled Version: 1.1.11\nVulnerability CVE-2025-5889\nSeverity: LOW\nFixed Version: 2.0.2, 1.1.12, 3.0.1, 4.0.1\nLink: [CVE-2025-5889](https://avd.aquasec.com/nvd/cve-2025-5889)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "js/examples/swe/pnpm-lock.yaml",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "js/examples/swe/pnpm-lock.yaml: brace-expansion@1.1.11"
+              }
+            }
+          ]
+        },
+        {
           "ruleId": "CVE-2024-41818",
-          "ruleIndex": 22,
+          "ruleIndex": 24,
           "level": "error",
           "message": {
             "text": "Package: fast-xml-parser\nInstalled Version: 4.4.0\nVulnerability CVE-2024-41818\nSeverity: HIGH\nFixed Version: 4.4.1\nLink: [CVE-2024-41818](https://avd.aquasec.com/nvd/cve-2024-41818)"
@@ -5938,7 +6613,7 @@
         },
         {
           "ruleId": "CVE-2024-7774",
-          "ruleIndex": 20,
+          "ruleIndex": 21,
           "level": "warning",
           "message": {
             "text": "Package: langchain\nInstalled Version: 0.2.10\nVulnerability CVE-2024-7774\nSeverity: MEDIUM\nFixed Version: 0.2.19\nLink: [CVE-2024-7774](https://avd.aquasec.com/nvd/cve-2024-7774)"
@@ -5965,7 +6640,7 @@
         },
         {
           "ruleId": "CVE-2024-55565",
-          "ruleIndex": 19,
+          "ruleIndex": 20,
           "level": "warning",
           "message": {
             "text": "Package: nanoid\nInstalled Version: 3.3.7\nVulnerability CVE-2024-55565\nSeverity: MEDIUM\nFixed Version: 5.0.9, 3.3.8\nLink: [CVE-2024-55565](https://avd.aquasec.com/nvd/cve-2024-55565)"
@@ -6046,7 +6721,7 @@
         },
         {
           "ruleId": "CVE-2024-48913",
-          "ruleIndex": 17,
+          "ruleIndex": 18,
           "level": "warning",
           "message": {
             "text": "Package: hono\nInstalled Version: 4.4.13\nVulnerability CVE-2024-48913\nSeverity: MEDIUM\nFixed Version: 4.6.5\nLink: [CVE-2024-48913](https://avd.aquasec.com/nvd/cve-2024-48913)"
@@ -6073,7 +6748,7 @@
         },
         {
           "ruleId": "CVE-2024-43787",
-          "ruleIndex": 18,
+          "ruleIndex": 19,
           "level": "note",
           "message": {
             "text": "Package: hono\nInstalled Version: 4.4.13\nVulnerability CVE-2024-43787\nSeverity: LOW\nFixed Version: 4.5.8\nLink: [CVE-2024-43787](https://avd.aquasec.com/nvd/cve-2024-43787)"
@@ -6100,7 +6775,7 @@
         },
         {
           "ruleId": "CVE-2024-7774",
-          "ruleIndex": 20,
+          "ruleIndex": 21,
           "level": "warning",
           "message": {
             "text": "Package: langchain\nInstalled Version: 0.2.9\nVulnerability CVE-2024-7774\nSeverity: MEDIUM\nFixed Version: 0.2.19\nLink: [CVE-2024-7774](https://avd.aquasec.com/nvd/cve-2024-7774)"
@@ -6127,7 +6802,7 @@
         },
         {
           "ruleId": "CVE-2024-55565",
-          "ruleIndex": 19,
+          "ruleIndex": 20,
           "level": "warning",
           "message": {
             "text": "Package: nanoid\nInstalled Version: 3.3.6\nVulnerability CVE-2024-55565\nSeverity: MEDIUM\nFixed Version: 5.0.9, 3.3.8\nLink: [CVE-2024-55565](https://avd.aquasec.com/nvd/cve-2024-55565)"
@@ -6154,7 +6829,7 @@
         },
         {
           "ruleId": "CVE-2024-55565",
-          "ruleIndex": 19,
+          "ruleIndex": 20,
           "level": "warning",
           "message": {
             "text": "Package: nanoid\nInstalled Version: 3.3.7\nVulnerability CVE-2024-55565\nSeverity: MEDIUM\nFixed Version: 5.0.9, 3.3.8\nLink: [CVE-2024-55565](https://avd.aquasec.com/nvd/cve-2024-55565)"
@@ -6181,7 +6856,7 @@
         },
         {
           "ruleId": "CVE-2025-29927",
-          "ruleIndex": 23,
+          "ruleIndex": 25,
           "level": "error",
           "message": {
             "text": "Package: next\nInstalled Version: 14.2.5\nVulnerability CVE-2025-29927\nSeverity: CRITICAL\nFixed Version: 13.5.9, 14.2.25, 15.2.3, 12.3.5\nLink: [CVE-2025-29927](https://avd.aquasec.com/nvd/cve-2025-29927)"
@@ -6208,7 +6883,7 @@
         },
         {
           "ruleId": "CVE-2024-46982",
-          "ruleIndex": 24,
+          "ruleIndex": 26,
           "level": "error",
           "message": {
             "text": "Package: next\nInstalled Version: 14.2.5\nVulnerability CVE-2024-46982\nSeverity: HIGH\nFixed Version: 13.5.7, 14.2.10\nLink: [CVE-2024-46982](https://avd.aquasec.com/nvd/cve-2024-46982)"
@@ -6235,7 +6910,7 @@
         },
         {
           "ruleId": "CVE-2024-51479",
-          "ruleIndex": 25,
+          "ruleIndex": 27,
           "level": "error",
           "message": {
             "text": "Package: next\nInstalled Version: 14.2.5\nVulnerability CVE-2024-51479\nSeverity: HIGH\nFixed Version: 14.2.15\nLink: [CVE-2024-51479](https://avd.aquasec.com/nvd/cve-2024-51479)"
@@ -6262,7 +6937,7 @@
         },
         {
           "ruleId": "CVE-2024-47831",
-          "ruleIndex": 26,
+          "ruleIndex": 28,
           "level": "warning",
           "message": {
             "text": "Package: next\nInstalled Version: 14.2.5\nVulnerability CVE-2024-47831\nSeverity: MEDIUM\nFixed Version: 14.2.7\nLink: [CVE-2024-47831](https://avd.aquasec.com/nvd/cve-2024-47831)"
@@ -6289,7 +6964,7 @@
         },
         {
           "ruleId": "CVE-2024-56332",
-          "ruleIndex": 27,
+          "ruleIndex": 29,
           "level": "warning",
           "message": {
             "text": "Package: next\nInstalled Version: 14.2.5\nVulnerability CVE-2024-56332\nSeverity: MEDIUM\nFixed Version: 13.5.8, 14.2.21, 15.1.2\nLink: [CVE-2024-56332](https://avd.aquasec.com/nvd/cve-2024-56332)"
@@ -6315,8 +6990,62 @@
           ]
         },
         {
+          "ruleId": "CVE-2025-32421",
+          "ruleIndex": 30,
+          "level": "note",
+          "message": {
+            "text": "Package: next\nInstalled Version: 14.2.5\nVulnerability CVE-2025-32421\nSeverity: LOW\nFixed Version: 14.2.24, 15.1.6\nLink: [CVE-2025-32421](https://avd.aquasec.com/nvd/cve-2025-32421)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "js/examples/vercel/nextjs-vercel-demo/pnpm-lock.yaml",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "js/examples/vercel/nextjs-vercel-demo/pnpm-lock.yaml: next@14.2.5"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2025-48068",
+          "ruleIndex": 31,
+          "level": "note",
+          "message": {
+            "text": "Package: next\nInstalled Version: 14.2.5\nVulnerability CVE-2025-48068\nSeverity: LOW\nFixed Version: 15.2.2, 14.2.30\nLink: [CVE-2025-48068](https://avd.aquasec.com/nvd/cve-2025-48068)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "js/examples/vercel/nextjs-vercel-demo/pnpm-lock.yaml",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "js/examples/vercel/nextjs-vercel-demo/pnpm-lock.yaml: next@14.2.5"
+              }
+            }
+          ]
+        },
+        {
           "ruleId": "CVE-2024-45047",
-          "ruleIndex": 21,
+          "ruleIndex": 22,
           "level": "warning",
           "message": {
             "text": "Package: svelte\nInstalled Version: 4.2.18\nVulnerability CVE-2024-45047\nSeverity: MEDIUM\nFixed Version: 4.2.19\nLink: [CVE-2024-45047](https://avd.aquasec.com/nvd/cve-2024-45047)"
@@ -6343,7 +7072,7 @@
         },
         {
           "ruleId": "CVE-2024-55565",
-          "ruleIndex": 19,
+          "ruleIndex": 20,
           "level": "warning",
           "message": {
             "text": "Package: nanoid\nInstalled Version: 3.3.6\nVulnerability CVE-2024-55565\nSeverity: MEDIUM\nFixed Version: 5.0.9, 3.3.8\nLink: [CVE-2024-55565](https://avd.aquasec.com/nvd/cve-2024-55565)"
@@ -6370,7 +7099,7 @@
         },
         {
           "ruleId": "CVE-2024-55565",
-          "ruleIndex": 19,
+          "ruleIndex": 20,
           "level": "warning",
           "message": {
             "text": "Package: nanoid\nInstalled Version: 3.3.7\nVulnerability CVE-2024-55565\nSeverity: MEDIUM\nFixed Version: 5.0.9, 3.3.8\nLink: [CVE-2024-55565](https://avd.aquasec.com/nvd/cve-2024-55565)"
@@ -6397,7 +7126,7 @@
         },
         {
           "ruleId": "CVE-2024-45047",
-          "ruleIndex": 21,
+          "ruleIndex": 22,
           "level": "warning",
           "message": {
             "text": "Package: svelte\nInstalled Version: 4.2.18\nVulnerability CVE-2024-45047\nSeverity: MEDIUM\nFixed Version: 4.2.19\nLink: [CVE-2024-45047](https://avd.aquasec.com/nvd/cve-2024-45047)"
@@ -6478,7 +7207,7 @@
         },
         {
           "ruleId": "CVE-2024-48913",
-          "ruleIndex": 17,
+          "ruleIndex": 18,
           "level": "warning",
           "message": {
             "text": "Package: hono\nInstalled Version: 4.4.12\nVulnerability CVE-2024-48913\nSeverity: MEDIUM\nFixed Version: 4.6.5\nLink: [CVE-2024-48913](https://avd.aquasec.com/nvd/cve-2024-48913)"
@@ -6505,7 +7234,7 @@
         },
         {
           "ruleId": "CVE-2024-43787",
-          "ruleIndex": 18,
+          "ruleIndex": 19,
           "level": "note",
           "message": {
             "text": "Package: hono\nInstalled Version: 4.4.12\nVulnerability CVE-2024-43787\nSeverity: LOW\nFixed Version: 4.5.8\nLink: [CVE-2024-43787](https://avd.aquasec.com/nvd/cve-2024-43787)"
@@ -6532,7 +7261,7 @@
         },
         {
           "ruleId": "CVE-2024-7774",
-          "ruleIndex": 20,
+          "ruleIndex": 21,
           "level": "warning",
           "message": {
             "text": "Package: langchain\nInstalled Version: 0.2.13\nVulnerability CVE-2024-7774\nSeverity: MEDIUM\nFixed Version: 0.2.19\nLink: [CVE-2024-7774](https://avd.aquasec.com/nvd/cve-2024-7774)"
@@ -6559,7 +7288,7 @@
         },
         {
           "ruleId": "CVE-2024-55565",
-          "ruleIndex": 19,
+          "ruleIndex": 20,
           "level": "warning",
           "message": {
             "text": "Package: nanoid\nInstalled Version: 3.3.6\nVulnerability CVE-2024-55565\nSeverity: MEDIUM\nFixed Version: 5.0.9, 3.3.8\nLink: [CVE-2024-55565](https://avd.aquasec.com/nvd/cve-2024-55565)"
@@ -6586,7 +7315,7 @@
         },
         {
           "ruleId": "CVE-2024-55565",
-          "ruleIndex": 19,
+          "ruleIndex": 20,
           "level": "warning",
           "message": {
             "text": "Package: nanoid\nInstalled Version: 3.3.7\nVulnerability CVE-2024-55565\nSeverity: MEDIUM\nFixed Version: 5.0.9, 3.3.8\nLink: [CVE-2024-55565](https://avd.aquasec.com/nvd/cve-2024-55565)"
@@ -6613,7 +7342,7 @@
         },
         {
           "ruleId": "CVE-2024-45047",
-          "ruleIndex": 21,
+          "ruleIndex": 22,
           "level": "warning",
           "message": {
             "text": "Package: svelte\nInstalled Version: 4.2.18\nVulnerability CVE-2024-45047\nSeverity: MEDIUM\nFixed Version: 4.2.19\nLink: [CVE-2024-45047](https://avd.aquasec.com/nvd/cve-2024-45047)"
@@ -6643,7 +7372,34 @@
           "ruleIndex": 15,
           "level": "error",
           "message": {
-            "text": "Package: tar-fs\nInstalled Version: 2.0.1\nVulnerability CVE-2024-12905\nSeverity: HIGH\nFixed Version: 1.16.4, 2.1.2, 3.0.8\nLink: [CVE-2024-12905](https://avd.aquasec.com/nvd/cve-2024-12905)"
+            "text": "Package: tar-fs\nInstalled Version: 2.0.1\nVulnerability CVE-2024-12905\nSeverity: HIGH\nFixed Version: 1.16.4, 2.1.2, 3.0.7\nLink: [CVE-2024-12905](https://avd.aquasec.com/nvd/cve-2024-12905)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "js/pnpm-lock.yaml",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "js/pnpm-lock.yaml: tar-fs@2.0.1"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2025-48387",
+          "ruleIndex": 16,
+          "level": "error",
+          "message": {
+            "text": "Package: tar-fs\nInstalled Version: 2.0.1\nVulnerability CVE-2025-48387\nSeverity: HIGH\nFixed Version: 1.16.5, 2.1.3, 3.0.9\nLink: [CVE-2025-48387](https://avd.aquasec.com/nvd/cve-2025-48387)"
           },
           "locations": [
             {
@@ -6667,7 +7423,7 @@
         },
         {
           "ruleId": "CVE-2024-12797",
-          "ruleIndex": 28,
+          "ruleIndex": 32,
           "level": "note",
           "message": {
             "text": "Package: cryptography\nInstalled Version: 44.0.0\nVulnerability CVE-2024-12797\nSeverity: LOW\nFixed Version: 44.0.1\nLink: [CVE-2024-12797](https://avd.aquasec.com/nvd/cve-2024-12797)"
@@ -6694,7 +7450,7 @@
         },
         {
           "ruleId": "CVE-2025-43859",
-          "ruleIndex": 29,
+          "ruleIndex": 33,
           "level": "error",
           "message": {
             "text": "Package: h11\nInstalled Version: 0.14.0\nVulnerability CVE-2025-43859\nSeverity: CRITICAL\nFixed Version: 0.16.0\nLink: [CVE-2025-43859](https://avd.aquasec.com/nvd/cve-2025-43859)"
@@ -6720,8 +7476,35 @@
           ]
         },
         {
+          "ruleId": "CVE-2024-47081",
+          "ruleIndex": 34,
+          "level": "warning",
+          "message": {
+            "text": "Package: requests\nInstalled Version: 2.32.3\nVulnerability CVE-2024-47081\nSeverity: MEDIUM\nFixed Version: 2.32.4\nLink: [CVE-2024-47081](https://avd.aquasec.com/nvd/cve-2024-47081)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "python/examples/advanced_agents/assignment-agent/requirements.txt",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 52,
+                  "startColumn": 1,
+                  "endLine": 52,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "python/examples/advanced_agents/assignment-agent/requirements.txt: requests@2.32.3"
+              }
+            }
+          ]
+        },
+        {
           "ruleId": "CVE-2024-56201",
-          "ruleIndex": 30,
+          "ruleIndex": 35,
           "level": "warning",
           "message": {
             "text": "Package: Jinja2\nInstalled Version: 3.1.4\nVulnerability CVE-2024-56201\nSeverity: MEDIUM\nFixed Version: 3.1.5\nLink: [CVE-2024-56201](https://avd.aquasec.com/nvd/cve-2024-56201)"
@@ -6748,7 +7531,7 @@
         },
         {
           "ruleId": "CVE-2024-56326",
-          "ruleIndex": 31,
+          "ruleIndex": 36,
           "level": "warning",
           "message": {
             "text": "Package: Jinja2\nInstalled Version: 3.1.4\nVulnerability CVE-2024-56326\nSeverity: MEDIUM\nFixed Version: 3.1.5\nLink: [CVE-2024-56326](https://avd.aquasec.com/nvd/cve-2024-56326)"
@@ -6775,7 +7558,7 @@
         },
         {
           "ruleId": "CVE-2025-27516",
-          "ruleIndex": 32,
+          "ruleIndex": 37,
           "level": "warning",
           "message": {
             "text": "Package: Jinja2\nInstalled Version: 3.1.4\nVulnerability CVE-2025-27516\nSeverity: MEDIUM\nFixed Version: 3.1.6\nLink: [CVE-2025-27516](https://avd.aquasec.com/nvd/cve-2025-27516)"
@@ -6802,7 +7585,7 @@
         },
         {
           "ruleId": "CVE-2024-52303",
-          "ruleIndex": 33,
+          "ruleIndex": 38,
           "level": "warning",
           "message": {
             "text": "Package: aiohttp\nInstalled Version: 3.10.10\nVulnerability CVE-2024-52303\nSeverity: MEDIUM\nFixed Version: 3.10.11\nLink: [CVE-2024-52303](https://avd.aquasec.com/nvd/cve-2024-52303)"
@@ -6829,7 +7612,7 @@
         },
         {
           "ruleId": "CVE-2024-52304",
-          "ruleIndex": 34,
+          "ruleIndex": 39,
           "level": "warning",
           "message": {
             "text": "Package: aiohttp\nInstalled Version: 3.10.10\nVulnerability CVE-2024-52304\nSeverity: MEDIUM\nFixed Version: 3.10.11\nLink: [CVE-2024-52304](https://avd.aquasec.com/nvd/cve-2024-52304)"
@@ -6856,7 +7639,7 @@
         },
         {
           "ruleId": "CVE-2024-8953",
-          "ruleIndex": 35,
+          "ruleIndex": 40,
           "level": "error",
           "message": {
             "text": "Package: composio_core\nInstalled Version: 0.5.38\nVulnerability CVE-2024-8953\nSeverity: HIGH\nFixed Version: 0.5.43\nLink: [CVE-2024-8953](https://avd.aquasec.com/nvd/cve-2024-8953)"
@@ -6883,7 +7666,7 @@
         },
         {
           "ruleId": "CVE-2024-12797",
-          "ruleIndex": 28,
+          "ruleIndex": 32,
           "level": "note",
           "message": {
             "text": "Package: cryptography\nInstalled Version: 43.0.3\nVulnerability CVE-2024-12797\nSeverity: LOW\nFixed Version: 44.0.1\nLink: [CVE-2024-12797](https://avd.aquasec.com/nvd/cve-2024-12797)"
@@ -6910,7 +7693,7 @@
         },
         {
           "ruleId": "CVE-2025-43859",
-          "ruleIndex": 29,
+          "ruleIndex": 33,
           "level": "error",
           "message": {
             "text": "Package: h11\nInstalled Version: 0.14.0\nVulnerability CVE-2025-43859\nSeverity: CRITICAL\nFixed Version: 0.16.0\nLink: [CVE-2025-43859](https://avd.aquasec.com/nvd/cve-2025-43859)"
@@ -6937,7 +7720,7 @@
         },
         {
           "ruleId": "CVE-2024-10188",
-          "ruleIndex": 36,
+          "ruleIndex": 41,
           "level": "error",
           "message": {
             "text": "Package: litellm\nInstalled Version: 1.51.3\nVulnerability CVE-2024-10188\nSeverity: HIGH\nFixed Version: 1.53.1.dev1\nLink: [CVE-2024-10188](https://avd.aquasec.com/nvd/cve-2024-10188)"
@@ -6964,7 +7747,7 @@
         },
         {
           "ruleId": "CVE-2024-8984",
-          "ruleIndex": 37,
+          "ruleIndex": 42,
           "level": "error",
           "message": {
             "text": "Package: litellm\nInstalled Version: 1.51.3\nVulnerability CVE-2024-8984\nSeverity: HIGH\nFixed Version: 1.56.2\nLink: [CVE-2024-8984](https://avd.aquasec.com/nvd/cve-2024-8984)"
@@ -6991,7 +7774,7 @@
         },
         {
           "ruleId": "CVE-2025-0330",
-          "ruleIndex": 38,
+          "ruleIndex": 43,
           "level": "error",
           "message": {
             "text": "Package: litellm\nInstalled Version: 1.51.3\nVulnerability CVE-2025-0330\nSeverity: HIGH\nFixed Version: \nLink: [CVE-2025-0330](https://avd.aquasec.com/nvd/cve-2025-0330)"
@@ -7018,7 +7801,7 @@
         },
         {
           "ruleId": "CVE-2025-0628",
-          "ruleIndex": 39,
+          "ruleIndex": 44,
           "level": "error",
           "message": {
             "text": "Package: litellm\nInstalled Version: 1.51.3\nVulnerability CVE-2025-0628\nSeverity: HIGH\nFixed Version: 1.61.15\nLink: [CVE-2025-0628](https://avd.aquasec.com/nvd/cve-2025-0628)"
@@ -7044,8 +7827,35 @@
           ]
         },
         {
+          "ruleId": "CVE-2024-47081",
+          "ruleIndex": 34,
+          "level": "warning",
+          "message": {
+            "text": "Package: requests\nInstalled Version: 2.32.3\nVulnerability CVE-2024-47081\nSeverity: MEDIUM\nFixed Version: 2.32.4\nLink: [CVE-2024-47081](https://avd.aquasec.com/nvd/cve-2024-47081)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "python/examples/advanced_agents/slackbot_code_expert/requirements.txt",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 214,
+                  "startColumn": 1,
+                  "endLine": 214,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "python/examples/advanced_agents/slackbot_code_expert/requirements.txt: requests@2.32.3"
+              }
+            }
+          ]
+        },
+        {
           "ruleId": "CVE-2025-32434",
-          "ruleIndex": 40,
+          "ruleIndex": 45,
           "level": "error",
           "message": {
             "text": "Package: torch\nInstalled Version: 2.5.1\nVulnerability CVE-2025-32434\nSeverity: CRITICAL\nFixed Version: 2.6.0\nLink: [CVE-2025-32434](https://avd.aquasec.com/nvd/cve-2025-32434)"
@@ -7072,7 +7882,7 @@
         },
         {
           "ruleId": "CVE-2025-3730",
-          "ruleIndex": 41,
+          "ruleIndex": 46,
           "level": "warning",
           "message": {
             "text": "Package: torch\nInstalled Version: 2.5.1\nVulnerability CVE-2025-3730\nSeverity: MEDIUM\nFixed Version: \nLink: [CVE-2025-3730](https://avd.aquasec.com/nvd/cve-2025-3730)"
@@ -7099,10 +7909,10 @@
         },
         {
           "ruleId": "CVE-2025-2953",
-          "ruleIndex": 42,
+          "ruleIndex": 47,
           "level": "note",
           "message": {
-            "text": "Package: torch\nInstalled Version: 2.5.1\nVulnerability CVE-2025-2953\nSeverity: LOW\nFixed Version: \nLink: [CVE-2025-2953](https://avd.aquasec.com/nvd/cve-2025-2953)"
+            "text": "Package: torch\nInstalled Version: 2.5.1\nVulnerability CVE-2025-2953\nSeverity: LOW\nFixed Version: 2.7.1-rc1\nLink: [CVE-2025-2953](https://avd.aquasec.com/nvd/cve-2025-2953)"
           },
           "locations": [
             {
@@ -7126,7 +7936,7 @@
         },
         {
           "ruleId": "CVE-2024-11392",
-          "ruleIndex": 43,
+          "ruleIndex": 48,
           "level": "error",
           "message": {
             "text": "Package: transformers\nInstalled Version: 4.46.1\nVulnerability CVE-2024-11392\nSeverity: HIGH\nFixed Version: 4.48.0\nLink: [CVE-2024-11392](https://avd.aquasec.com/nvd/cve-2024-11392)"
@@ -7153,7 +7963,7 @@
         },
         {
           "ruleId": "CVE-2024-11393",
-          "ruleIndex": 44,
+          "ruleIndex": 49,
           "level": "error",
           "message": {
             "text": "Package: transformers\nInstalled Version: 4.46.1\nVulnerability CVE-2024-11393\nSeverity: HIGH\nFixed Version: 4.48.0\nLink: [CVE-2024-11393](https://avd.aquasec.com/nvd/cve-2024-11393)"
@@ -7180,7 +7990,7 @@
         },
         {
           "ruleId": "CVE-2024-11394",
-          "ruleIndex": 45,
+          "ruleIndex": 50,
           "level": "error",
           "message": {
             "text": "Package: transformers\nInstalled Version: 4.46.1\nVulnerability CVE-2024-11394\nSeverity: HIGH\nFixed Version: 4.48.0\nLink: [CVE-2024-11394](https://avd.aquasec.com/nvd/cve-2024-11394)"
@@ -7207,7 +8017,7 @@
         },
         {
           "ruleId": "CVE-2024-12720",
-          "ruleIndex": 46,
+          "ruleIndex": 51,
           "level": "warning",
           "message": {
             "text": "Package: transformers\nInstalled Version: 4.46.1\nVulnerability CVE-2024-12720\nSeverity: MEDIUM\nFixed Version: 4.48.0\nLink: [CVE-2024-12720](https://avd.aquasec.com/nvd/cve-2024-12720)"
@@ -7234,7 +8044,7 @@
         },
         {
           "ruleId": "CVE-2025-1194",
-          "ruleIndex": 47,
+          "ruleIndex": 52,
           "level": "warning",
           "message": {
             "text": "Package: transformers\nInstalled Version: 4.46.1\nVulnerability CVE-2025-1194\nSeverity: MEDIUM\nFixed Version: 4.50.0\nLink: [CVE-2025-1194](https://avd.aquasec.com/nvd/cve-2025-1194)"
@@ -7260,35 +8070,35 @@
           ]
         },
         {
-          "ruleId": "CVE-2024-42367",
-          "ruleIndex": 48,
+          "ruleId": "CVE-2025-2099",
+          "ruleIndex": 53,
           "level": "warning",
           "message": {
-            "text": "Package: aiohttp\nInstalled Version: 3.9.5\nVulnerability CVE-2024-42367\nSeverity: MEDIUM\nFixed Version: 3.10.2\nLink: [CVE-2024-42367](https://avd.aquasec.com/nvd/cve-2024-42367)"
+            "text": "Package: transformers\nInstalled Version: 4.46.1\nVulnerability CVE-2025-2099\nSeverity: MEDIUM\nFixed Version: 4.50.0\nLink: [CVE-2025-2099](https://avd.aquasec.com/nvd/cve-2025-2099)"
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "python/examples/miscellaneous/slack_calendar_agent/poetry.lock",
+                  "uri": "python/examples/advanced_agents/slackbot_code_expert/requirements.txt",
                   "uriBaseId": "ROOTPATH"
                 },
                 "region": {
-                  "startLine": 1,
+                  "startLine": 252,
                   "startColumn": 1,
-                  "endLine": 1,
+                  "endLine": 252,
                   "endColumn": 1
                 }
               },
               "message": {
-                "text": "python/examples/miscellaneous/slack_calendar_agent/poetry.lock: aiohttp@3.9.5"
+                "text": "python/examples/advanced_agents/slackbot_code_expert/requirements.txt: transformers@4.46.1"
               }
             }
           ]
         },
         {
           "ruleId": "CVE-2024-52304",
-          "ruleIndex": 34,
+          "ruleIndex": 39,
           "level": "warning",
           "message": {
             "text": "Package: aiohttp\nInstalled Version: 3.9.5\nVulnerability CVE-2024-52304\nSeverity: MEDIUM\nFixed Version: 3.10.11\nLink: [CVE-2024-52304](https://avd.aquasec.com/nvd/cve-2024-52304)"
@@ -7315,7 +8125,7 @@
         },
         {
           "ruleId": "CVE-2024-39689",
-          "ruleIndex": 49,
+          "ruleIndex": 54,
           "level": "note",
           "message": {
             "text": "Package: certifi\nInstalled Version: 2024.6.2\nVulnerability CVE-2024-39689\nSeverity: LOW\nFixed Version: 2024.7.4\nLink: [CVE-2024-39689](https://avd.aquasec.com/nvd/cve-2024-39689)"
@@ -7342,7 +8152,7 @@
         },
         {
           "ruleId": "CVE-2024-8953",
-          "ruleIndex": 35,
+          "ruleIndex": 40,
           "level": "error",
           "message": {
             "text": "Package: composio-core\nInstalled Version: 0.3.13\nVulnerability CVE-2024-8953\nSeverity: HIGH\nFixed Version: 0.5.43\nLink: [CVE-2024-8953](https://avd.aquasec.com/nvd/cve-2024-8953)"
@@ -7369,7 +8179,7 @@
         },
         {
           "ruleId": "CVE-2024-8864",
-          "ruleIndex": 50,
+          "ruleIndex": 55,
           "level": "warning",
           "message": {
             "text": "Package: composio-core\nInstalled Version: 0.3.13\nVulnerability CVE-2024-8864\nSeverity: MEDIUM\nFixed Version: \nLink: [CVE-2024-8864](https://avd.aquasec.com/nvd/cve-2024-8864)"
@@ -7396,7 +8206,7 @@
         },
         {
           "ruleId": "CVE-2024-8865",
-          "ruleIndex": 51,
+          "ruleIndex": 56,
           "level": "warning",
           "message": {
             "text": "Package: composio-core\nInstalled Version: 0.3.13\nVulnerability CVE-2024-8865\nSeverity: MEDIUM\nFixed Version: \nLink: [CVE-2024-8865](https://avd.aquasec.com/nvd/cve-2024-8865)"
@@ -7423,7 +8233,7 @@
         },
         {
           "ruleId": "CVE-2024-8952",
-          "ruleIndex": 52,
+          "ruleIndex": 57,
           "level": "warning",
           "message": {
             "text": "Package: composio-core\nInstalled Version: 0.3.13\nVulnerability CVE-2024-8952\nSeverity: MEDIUM\nFixed Version: \nLink: [CVE-2024-8952](https://avd.aquasec.com/nvd/cve-2024-8952)"
@@ -7450,7 +8260,7 @@
         },
         {
           "ruleId": "CVE-2024-8955",
-          "ruleIndex": 53,
+          "ruleIndex": 58,
           "level": "warning",
           "message": {
             "text": "Package: composio-core\nInstalled Version: 0.3.13\nVulnerability CVE-2024-8955\nSeverity: MEDIUM\nFixed Version: \nLink: [CVE-2024-8955](https://avd.aquasec.com/nvd/cve-2024-8955)"
@@ -7477,7 +8287,7 @@
         },
         {
           "ruleId": "CVE-2025-43859",
-          "ruleIndex": 29,
+          "ruleIndex": 33,
           "level": "error",
           "message": {
             "text": "Package: h11\nInstalled Version: 0.14.0\nVulnerability CVE-2025-43859\nSeverity: CRITICAL\nFixed Version: 0.16.0\nLink: [CVE-2025-43859](https://avd.aquasec.com/nvd/cve-2025-43859)"
@@ -7504,7 +8314,7 @@
         },
         {
           "ruleId": "CVE-2024-10940",
-          "ruleIndex": 54,
+          "ruleIndex": 59,
           "level": "warning",
           "message": {
             "text": "Package: langchain-core\nInstalled Version: 0.2.9\nVulnerability CVE-2024-10940\nSeverity: MEDIUM\nFixed Version: 0.1.53, 0.2.43, 0.3.15\nLink: [CVE-2024-10940](https://avd.aquasec.com/nvd/cve-2024-10940)"
@@ -7530,8 +8340,35 @@
           ]
         },
         {
+          "ruleId": "CVE-2025-1793",
+          "ruleIndex": 60,
+          "level": "error",
+          "message": {
+            "text": "Package: llama-index\nInstalled Version: 0.10.47\nVulnerability CVE-2025-1793\nSeverity: CRITICAL\nFixed Version: 0.12.28\nLink: [CVE-2025-1793](https://avd.aquasec.com/nvd/cve-2025-1793)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "python/examples/miscellaneous/slack_calendar_agent/poetry.lock",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "python/examples/miscellaneous/slack_calendar_agent/poetry.lock: llama-index@0.10.47"
+              }
+            }
+          ]
+        },
+        {
           "ruleId": "CVE-2024-12704",
-          "ruleIndex": 55,
+          "ruleIndex": 61,
           "level": "error",
           "message": {
             "text": "Package: llama-index\nInstalled Version: 0.10.47\nVulnerability CVE-2024-12704\nSeverity: HIGH\nFixed Version: 0.12.6\nLink: [CVE-2024-12704](https://avd.aquasec.com/nvd/cve-2024-12704)"
@@ -7558,7 +8395,7 @@
         },
         {
           "ruleId": "CVE-2024-12911",
-          "ruleIndex": 56,
+          "ruleIndex": 62,
           "level": "error",
           "message": {
             "text": "Package: llama-index\nInstalled Version: 0.10.47\nVulnerability CVE-2024-12911\nSeverity: HIGH\nFixed Version: 0.12.3\nLink: [CVE-2024-12911](https://avd.aquasec.com/nvd/cve-2024-12911)"
@@ -7585,7 +8422,7 @@
         },
         {
           "ruleId": "CVE-2024-12910",
-          "ruleIndex": 57,
+          "ruleIndex": 63,
           "level": "warning",
           "message": {
             "text": "Package: llama-index\nInstalled Version: 0.10.47\nVulnerability CVE-2024-12910\nSeverity: MEDIUM\nFixed Version: 0.12.9\nLink: [CVE-2024-12910](https://avd.aquasec.com/nvd/cve-2024-12910)"
@@ -7611,8 +8448,35 @@
           ]
         },
         {
+          "ruleId": "CVE-2025-1753",
+          "ruleIndex": 64,
+          "level": "error",
+          "message": {
+            "text": "Package: llama-index-cli\nInstalled Version: 0.1.12\nVulnerability CVE-2025-1753\nSeverity: HIGH\nFixed Version: 0.4.1\nLink: [CVE-2025-1753](https://avd.aquasec.com/nvd/cve-2025-1753)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "python/examples/miscellaneous/slack_calendar_agent/poetry.lock",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "python/examples/miscellaneous/slack_calendar_agent/poetry.lock: llama-index-cli@0.1.12"
+              }
+            }
+          ]
+        },
+        {
           "ruleId": "CVE-2024-39705",
-          "ruleIndex": 58,
+          "ruleIndex": 65,
           "level": "error",
           "message": {
             "text": "Package: nltk\nInstalled Version: 3.8.1\nVulnerability CVE-2024-39705\nSeverity: HIGH\nFixed Version: 3.9\nLink: [CVE-2024-39705](https://avd.aquasec.com/nvd/cve-2024-39705)"
@@ -7638,11 +8502,38 @@
           ]
         },
         {
+          "ruleId": "CVE-2024-47081",
+          "ruleIndex": 34,
+          "level": "warning",
+          "message": {
+            "text": "Package: requests\nInstalled Version: 2.32.3\nVulnerability CVE-2024-47081\nSeverity: MEDIUM\nFixed Version: 2.32.4\nLink: [CVE-2024-47081](https://avd.aquasec.com/nvd/cve-2024-47081)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "python/examples/miscellaneous/slack_calendar_agent/poetry.lock",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "python/examples/miscellaneous/slack_calendar_agent/poetry.lock: requests@2.32.3"
+              }
+            }
+          ]
+        },
+        {
           "ruleId": "CVE-2024-40647",
-          "ruleIndex": 59,
+          "ruleIndex": 66,
           "level": "note",
           "message": {
-            "text": "Package: sentry-sdk\nInstalled Version: 2.6.0\nVulnerability CVE-2024-40647\nSeverity: LOW\nFixed Version: 2.8.0\nLink: [CVE-2024-40647](https://avd.aquasec.com/nvd/cve-2024-40647)"
+            "text": "Package: sentry-sdk\nInstalled Version: 2.6.0\nVulnerability CVE-2024-40647\nSeverity: LOW\nFixed Version: 2.8.0, 1.45.1\nLink: [CVE-2024-40647](https://avd.aquasec.com/nvd/cve-2024-40647)"
           },
           "locations": [
             {
@@ -7666,7 +8557,7 @@
         },
         {
           "ruleId": "CVE-2024-11392",
-          "ruleIndex": 43,
+          "ruleIndex": 48,
           "level": "error",
           "message": {
             "text": "Package: transformers\nInstalled Version: 4.41.2\nVulnerability CVE-2024-11392\nSeverity: HIGH\nFixed Version: 4.48.0\nLink: [CVE-2024-11392](https://avd.aquasec.com/nvd/cve-2024-11392)"
@@ -7693,7 +8584,7 @@
         },
         {
           "ruleId": "CVE-2024-11393",
-          "ruleIndex": 44,
+          "ruleIndex": 49,
           "level": "error",
           "message": {
             "text": "Package: transformers\nInstalled Version: 4.41.2\nVulnerability CVE-2024-11393\nSeverity: HIGH\nFixed Version: 4.48.0\nLink: [CVE-2024-11393](https://avd.aquasec.com/nvd/cve-2024-11393)"
@@ -7720,7 +8611,7 @@
         },
         {
           "ruleId": "CVE-2024-11394",
-          "ruleIndex": 45,
+          "ruleIndex": 50,
           "level": "error",
           "message": {
             "text": "Package: transformers\nInstalled Version: 4.41.2\nVulnerability CVE-2024-11394\nSeverity: HIGH\nFixed Version: 4.48.0\nLink: [CVE-2024-11394](https://avd.aquasec.com/nvd/cve-2024-11394)"
@@ -7747,7 +8638,7 @@
         },
         {
           "ruleId": "CVE-2024-12720",
-          "ruleIndex": 46,
+          "ruleIndex": 51,
           "level": "warning",
           "message": {
             "text": "Package: transformers\nInstalled Version: 4.41.2\nVulnerability CVE-2024-12720\nSeverity: MEDIUM\nFixed Version: 4.48.0\nLink: [CVE-2024-12720](https://avd.aquasec.com/nvd/cve-2024-12720)"
@@ -7774,7 +8665,7 @@
         },
         {
           "ruleId": "CVE-2025-1194",
-          "ruleIndex": 47,
+          "ruleIndex": 52,
           "level": "warning",
           "message": {
             "text": "Package: transformers\nInstalled Version: 4.41.2\nVulnerability CVE-2025-1194\nSeverity: MEDIUM\nFixed Version: 4.50.0\nLink: [CVE-2025-1194](https://avd.aquasec.com/nvd/cve-2025-1194)"
@@ -7800,8 +8691,35 @@
           ]
         },
         {
+          "ruleId": "CVE-2025-2099",
+          "ruleIndex": 53,
+          "level": "warning",
+          "message": {
+            "text": "Package: transformers\nInstalled Version: 4.41.2\nVulnerability CVE-2025-2099\nSeverity: MEDIUM\nFixed Version: 4.50.0\nLink: [CVE-2025-2099](https://avd.aquasec.com/nvd/cve-2025-2099)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "python/examples/miscellaneous/slack_calendar_agent/poetry.lock",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "python/examples/miscellaneous/slack_calendar_agent/poetry.lock: transformers@4.41.2"
+              }
+            }
+          ]
+        },
+        {
           "ruleId": "CVE-2023-37920",
-          "ruleIndex": 60,
+          "ruleIndex": 67,
           "level": "error",
           "message": {
             "text": "Package: certifi\nInstalled Version: 2022.12.7\nVulnerability CVE-2023-37920\nSeverity: HIGH\nFixed Version: 2023.7.22\nLink: [CVE-2023-37920](https://avd.aquasec.com/nvd/cve-2023-37920)"
@@ -7828,7 +8746,7 @@
         },
         {
           "ruleId": "CVE-2024-39689",
-          "ruleIndex": 49,
+          "ruleIndex": 54,
           "level": "note",
           "message": {
             "text": "Package: certifi\nInstalled Version: 2022.12.7\nVulnerability CVE-2024-39689\nSeverity: LOW\nFixed Version: 2024.7.4\nLink: [CVE-2024-39689](https://avd.aquasec.com/nvd/cve-2024-39689)"
@@ -7855,7 +8773,7 @@
         },
         {
           "ruleId": "CVE-2023-38325",
-          "ruleIndex": 61,
+          "ruleIndex": 68,
           "level": "error",
           "message": {
             "text": "Package: cryptography\nInstalled Version: 40.0.1\nVulnerability CVE-2023-38325\nSeverity: HIGH\nFixed Version: 41.0.2\nLink: [CVE-2023-38325](https://avd.aquasec.com/nvd/cve-2023-38325)"
@@ -7882,7 +8800,7 @@
         },
         {
           "ruleId": "CVE-2023-50782",
-          "ruleIndex": 62,
+          "ruleIndex": 69,
           "level": "error",
           "message": {
             "text": "Package: cryptography\nInstalled Version: 40.0.1\nVulnerability CVE-2023-50782\nSeverity: HIGH\nFixed Version: 42.0.0\nLink: [CVE-2023-50782](https://avd.aquasec.com/nvd/cve-2023-50782)"
@@ -7909,7 +8827,7 @@
         },
         {
           "ruleId": "CVE-2024-26130",
-          "ruleIndex": 63,
+          "ruleIndex": 70,
           "level": "error",
           "message": {
             "text": "Package: cryptography\nInstalled Version: 40.0.1\nVulnerability CVE-2024-26130\nSeverity: HIGH\nFixed Version: 42.0.4\nLink: [CVE-2024-26130](https://avd.aquasec.com/nvd/cve-2024-26130)"
@@ -7936,7 +8854,7 @@
         },
         {
           "ruleId": "CVE-2023-49083",
-          "ruleIndex": 64,
+          "ruleIndex": 71,
           "level": "warning",
           "message": {
             "text": "Package: cryptography\nInstalled Version: 40.0.1\nVulnerability CVE-2023-49083\nSeverity: MEDIUM\nFixed Version: 41.0.6\nLink: [CVE-2023-49083](https://avd.aquasec.com/nvd/cve-2023-49083)"
@@ -7963,7 +8881,7 @@
         },
         {
           "ruleId": "CVE-2024-0727",
-          "ruleIndex": 65,
+          "ruleIndex": 72,
           "level": "warning",
           "message": {
             "text": "Package: cryptography\nInstalled Version: 40.0.1\nVulnerability CVE-2024-0727\nSeverity: MEDIUM\nFixed Version: 42.0.2\nLink: [CVE-2024-0727](https://avd.aquasec.com/nvd/cve-2024-0727)"
@@ -7990,7 +8908,7 @@
         },
         {
           "ruleId": "GHSA-h4gh-qq45-vh27",
-          "ruleIndex": 66,
+          "ruleIndex": 73,
           "level": "warning",
           "message": {
             "text": "Package: cryptography\nInstalled Version: 40.0.1\nVulnerability GHSA-h4gh-qq45-vh27\nSeverity: MEDIUM\nFixed Version: 43.0.1\nLink: [GHSA-h4gh-qq45-vh27](https://github.com/advisories/GHSA-h4gh-qq45-vh27)"
@@ -8017,7 +8935,7 @@
         },
         {
           "ruleId": "GHSA-5cpq-8wj7-hf2v",
-          "ruleIndex": 67,
+          "ruleIndex": 74,
           "level": "note",
           "message": {
             "text": "Package: cryptography\nInstalled Version: 40.0.1\nVulnerability GHSA-5cpq-8wj7-hf2v\nSeverity: LOW\nFixed Version: 41.0.0\nLink: [GHSA-5cpq-8wj7-hf2v](https://github.com/advisories/GHSA-5cpq-8wj7-hf2v)"
@@ -8044,7 +8962,7 @@
         },
         {
           "ruleId": "GHSA-jm77-qphf-c4w8",
-          "ruleIndex": 68,
+          "ruleIndex": 75,
           "level": "note",
           "message": {
             "text": "Package: cryptography\nInstalled Version: 40.0.1\nVulnerability GHSA-jm77-qphf-c4w8\nSeverity: LOW\nFixed Version: 41.0.3\nLink: [GHSA-jm77-qphf-c4w8](https://github.com/advisories/GHSA-jm77-qphf-c4w8)"
@@ -8071,7 +8989,7 @@
         },
         {
           "ruleId": "GHSA-v8gr-m533-ghj9",
-          "ruleIndex": 69,
+          "ruleIndex": 76,
           "level": "note",
           "message": {
             "text": "Package: cryptography\nInstalled Version: 40.0.1\nVulnerability GHSA-v8gr-m533-ghj9\nSeverity: LOW\nFixed Version: 41.0.4\nLink: [GHSA-v8gr-m533-ghj9](https://github.com/advisories/GHSA-v8gr-m533-ghj9)"
@@ -8098,7 +9016,7 @@
         },
         {
           "ruleId": "CVE-2024-3651",
-          "ruleIndex": 70,
+          "ruleIndex": 77,
           "level": "warning",
           "message": {
             "text": "Package: idna\nInstalled Version: 3.4\nVulnerability CVE-2024-3651\nSeverity: MEDIUM\nFixed Version: 3.7\nLink: [CVE-2024-3651](https://avd.aquasec.com/nvd/cve-2024-3651)"
@@ -8125,7 +9043,7 @@
         },
         {
           "ruleId": "CVE-2024-22195",
-          "ruleIndex": 71,
+          "ruleIndex": 78,
           "level": "warning",
           "message": {
             "text": "Package: jinja2\nInstalled Version: 3.1.2\nVulnerability CVE-2024-22195\nSeverity: MEDIUM\nFixed Version: 3.1.3\nLink: [CVE-2024-22195](https://avd.aquasec.com/nvd/cve-2024-22195)"
@@ -8152,7 +9070,7 @@
         },
         {
           "ruleId": "CVE-2024-34064",
-          "ruleIndex": 72,
+          "ruleIndex": 79,
           "level": "warning",
           "message": {
             "text": "Package: jinja2\nInstalled Version: 3.1.2\nVulnerability CVE-2024-34064\nSeverity: MEDIUM\nFixed Version: 3.1.4\nLink: [CVE-2024-34064](https://avd.aquasec.com/nvd/cve-2024-34064)"
@@ -8179,7 +9097,7 @@
         },
         {
           "ruleId": "CVE-2024-56201",
-          "ruleIndex": 30,
+          "ruleIndex": 35,
           "level": "warning",
           "message": {
             "text": "Package: jinja2\nInstalled Version: 3.1.2\nVulnerability CVE-2024-56201\nSeverity: MEDIUM\nFixed Version: 3.1.5\nLink: [CVE-2024-56201](https://avd.aquasec.com/nvd/cve-2024-56201)"
@@ -8206,7 +9124,7 @@
         },
         {
           "ruleId": "CVE-2024-56326",
-          "ruleIndex": 31,
+          "ruleIndex": 36,
           "level": "warning",
           "message": {
             "text": "Package: jinja2\nInstalled Version: 3.1.2\nVulnerability CVE-2024-56326\nSeverity: MEDIUM\nFixed Version: 3.1.5\nLink: [CVE-2024-56326](https://avd.aquasec.com/nvd/cve-2024-56326)"
@@ -8233,7 +9151,7 @@
         },
         {
           "ruleId": "CVE-2025-27516",
-          "ruleIndex": 32,
+          "ruleIndex": 37,
           "level": "warning",
           "message": {
             "text": "Package: jinja2\nInstalled Version: 3.1.2\nVulnerability CVE-2025-27516\nSeverity: MEDIUM\nFixed Version: 3.1.6\nLink: [CVE-2025-27516](https://avd.aquasec.com/nvd/cve-2025-27516)"
@@ -8260,7 +9178,7 @@
         },
         {
           "ruleId": "CVE-2023-32681",
-          "ruleIndex": 73,
+          "ruleIndex": 80,
           "level": "warning",
           "message": {
             "text": "Package: requests\nInstalled Version: 2.28.2\nVulnerability CVE-2023-32681\nSeverity: MEDIUM\nFixed Version: 2.31.0\nLink: [CVE-2023-32681](https://avd.aquasec.com/nvd/cve-2023-32681)"
@@ -8287,7 +9205,7 @@
         },
         {
           "ruleId": "CVE-2024-35195",
-          "ruleIndex": 74,
+          "ruleIndex": 81,
           "level": "warning",
           "message": {
             "text": "Package: requests\nInstalled Version: 2.28.2\nVulnerability CVE-2024-35195\nSeverity: MEDIUM\nFixed Version: 2.32.0\nLink: [CVE-2024-35195](https://avd.aquasec.com/nvd/cve-2024-35195)"
@@ -8313,8 +9231,35 @@
           ]
         },
         {
+          "ruleId": "CVE-2024-47081",
+          "ruleIndex": 34,
+          "level": "warning",
+          "message": {
+            "text": "Package: requests\nInstalled Version: 2.28.2\nVulnerability CVE-2024-47081\nSeverity: MEDIUM\nFixed Version: 2.32.4\nLink: [CVE-2024-47081](https://avd.aquasec.com/nvd/cve-2024-47081)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "python/swe/tests/test_docker/requirements.txt",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 13,
+                  "startColumn": 1,
+                  "endLine": 13,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "python/swe/tests/test_docker/requirements.txt: requests@2.28.2"
+              }
+            }
+          ]
+        },
+        {
           "ruleId": "CVE-2023-43804",
-          "ruleIndex": 75,
+          "ruleIndex": 82,
           "level": "error",
           "message": {
             "text": "Package: urllib3\nInstalled Version: 1.26.15\nVulnerability CVE-2023-43804\nSeverity: HIGH\nFixed Version: 2.0.6, 1.26.17\nLink: [CVE-2023-43804](https://avd.aquasec.com/nvd/cve-2023-43804)"
@@ -8341,7 +9286,7 @@
         },
         {
           "ruleId": "CVE-2023-45803",
-          "ruleIndex": 76,
+          "ruleIndex": 83,
           "level": "warning",
           "message": {
             "text": "Package: urllib3\nInstalled Version: 1.26.15\nVulnerability CVE-2023-45803\nSeverity: MEDIUM\nFixed Version: 2.0.7, 1.26.18\nLink: [CVE-2023-45803](https://avd.aquasec.com/nvd/cve-2023-45803)"
@@ -8368,7 +9313,7 @@
         },
         {
           "ruleId": "CVE-2024-37891",
-          "ruleIndex": 77,
+          "ruleIndex": 84,
           "level": "warning",
           "message": {
             "text": "Package: urllib3\nInstalled Version: 1.26.15\nVulnerability CVE-2024-37891\nSeverity: MEDIUM\nFixed Version: 1.26.19, 2.2.2\nLink: [CVE-2024-37891](https://avd.aquasec.com/nvd/cve-2024-37891)"
@@ -8395,7 +9340,7 @@
         },
         {
           "ruleId": "CVE-2024-53899",
-          "ruleIndex": 78,
+          "ruleIndex": 85,
           "level": "error",
           "message": {
             "text": "Package: virtualenv\nInstalled Version: 20.21.0\nVulnerability CVE-2024-53899\nSeverity: HIGH\nFixed Version: 20.26.6\nLink: [CVE-2024-53899](https://avd.aquasec.com/nvd/cve-2024-53899)"
@@ -8422,7 +9367,7 @@
         },
         {
           "ruleId": "jwt-token",
-          "ruleIndex": 79,
+          "ruleIndex": 86,
           "level": "warning",
           "message": {
             "text": "Artifact: docs/generate-docs.mjs\nType: \nSecret JWT token\nSeverity: MEDIUM\nMatch:     Cookie: 'authToken=****************************************************************************************************************************************************************************************************************************************;',  "
@@ -8449,7 +9394,7 @@
         },
         {
           "ruleId": "github-oauth",
-          "ruleIndex": 80,
+          "ruleIndex": 87,
           "level": "error",
           "message": {
             "text": "Artifact: docs/introduction/foundations/components/actions/local-code.mdx\nType: \nSecret GitHub OAuth Access Token\nSeverity: CRITICAL\nMatch:     \"access_token\": \"****************************************\","
@@ -8476,7 +9421,7 @@
         },
         {
           "ruleId": "github-oauth",
-          "ruleIndex": 80,
+          "ruleIndex": 87,
           "level": "error",
           "message": {
             "text": "Artifact: docs/introduction/foundations/components/actions/local-code.mdx\nType: \nSecret GitHub OAuth Access Token\nSeverity: CRITICAL\nMatch:       \"Authorization\": \"Bearer ****************************************\""
