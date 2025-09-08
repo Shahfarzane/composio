@@ -9,7 +9,7 @@ import typing_extensions as te
 from pydantic import BaseModel, Field
 
 from composio import Composio
-from composio.client.collections import CustomAuthParameter
+from composio.client.collections import ConnectedAccountModel, CustomAuthParameter
 from composio.client.enums.base import ActionData, SentinalObject, add_runtime_action
 from composio.client.exceptions import ComposioClientError
 from composio.exceptions import ComposioSDKError
@@ -23,6 +23,7 @@ from composio.tools.base.abs import (
 from composio.tools.base.local import LocalToolMixin
 from composio.tools.env.host.shell import Shell
 from composio.tools.env.host.workspace import Browsers, FileManagers, Shells
+from composio.utils import logging
 
 
 if t.TYPE_CHECKING:
@@ -157,6 +158,7 @@ def _wrap(
         display_name = f.__name__
 
         file = _file
+        runtime = True
         requires = _requires
         run_on_shell: bool = runs_on_shell
 
@@ -178,10 +180,11 @@ def _wrap(
         type(inflection.camelize(f.__name__), (WrappedAction,), {}),
     )
     cls.__doc__ = f.__doc__
-    cls.description = f.__doc__  # type: ignore
+    cls.description = f.__doc__ or f.__name__  # type: ignore
 
-    existing_actions = []
+    # Normalize app name
     toolname = toolname.upper()
+    existing_actions = []
     if toolname in tool_registry["runtime"]:
         existing_actions = tool_registry["runtime"][toolname].actions()
     tool = _create_tool_class(name=toolname, actions=[cls, *existing_actions])  # type: ignore
@@ -230,41 +233,127 @@ def _parse_annotated_type(
     return annottype, description, default
 
 
+def _clean_multiline_str(string: str) -> str:
+    return "\n".join(
+        filter(
+            lambda x: x,  # Filter empty lines
+            map(
+                lambda x: x.strip(),
+                string.split("\n"),
+            ),
+        )
+    )
+
+
+def _create_docstring_partitions(docstr: str) -> t.Tuple[str, list[str]]:
+    if ":param" in docstr:
+        header, *remaining = docstr.lstrip().rstrip().partition(":param")
+        return (
+            _clean_multiline_str(string=header),
+            _clean_multiline_str(string="".join(remaining)).split("\n"),
+        )
+
+    if ":return" in docstr:
+        header, *remaining = docstr.lstrip().rstrip().partition(":return")
+        return (
+            _clean_multiline_str(string=header),
+            _clean_multiline_str(string="".join(remaining)).split("\n"),
+        )
+
+    return _clean_multiline_str(string=docstr), []
+
+
 def _parse_docstring(
     docstr: str,
 ) -> t.Tuple[str, t.Dict[str, str], t.Optional[t.Tuple[str, str]]]:
     """Parse docstring for descriptions."""
-    header, *descriptions = docstr.lstrip().rstrip().split("\n")
+    header, descriptions = _create_docstring_partitions(docstr=docstr)
+    returns: t.Optional[t.Tuple[str, str]] = None
+    last_param: t.Optional[str] = None
+    is_return = False
     params = {}
-    returns = None
-    for description in descriptions:
+    while descriptions:
+        description = descriptions.pop(0)
         if not description:
             continue
 
         if ":param" in description:
-            param, description = description.replace(":param ", "").split(":")
-            params[param.lstrip().rstrip()] = description.lstrip().rstrip()
+            if last_param is not None:
+                last_param = None
+
+            param, description = description.replace(":param ", "").split(
+                ":",
+                maxsplit=1,
+            )
+            param = param.lstrip().rstrip()
+            params[param] = description.lstrip().rstrip()
+            last_param = param
+            continue
 
         if ":return" in description:
-            param, description = description.replace(":return ", "").split(":")
+            param, description = description.replace(":return ", "").split(
+                ":",
+                maxsplit=1,
+            )
             returns = (param.lstrip().strip(), description.lstrip().rstrip())
+            is_return = True
+            last_param = None
+            continue
+
+        if last_param is not None:
+            params[last_param] += " " + description.strip()
+            continue
+
+        if is_return and returns is not None:
+            r_name, r_desc = returns
+            returns = (r_name, r_desc + " " + description.strip())
 
     return header, params, returns
 
 
-def _get_auth_params(app: str, entity_id: str) -> t.Optional[t.Dict]:
+def _get_connected_account(
+    app: str, entity_id: str
+) -> t.Optional[ConnectedAccountModel]:
     try:
         client = Composio.get_latest()
-        connection_params = client.connected_accounts.get(
+        connected_account = client.connected_accounts.get(
             connection_id=client.get_entity(entity_id).get_connection(app=app).id
-        ).connectionParams
+        )
+        return connected_account
+    except ComposioClientError:
+        return None
+
+
+def _get_auth_params(app: str, metadata: t.Dict) -> t.Dict:
+    try:
+        client = Composio.get_latest()
+        connected_account = client.connected_accounts.get(
+            connection_id=client.get_entity(metadata["entity_id"])
+            .get_connection(app=app)
+            .id
+        )
+        connection_params = connected_account.connectionParams
         return {
+            "entity_id": metadata["entity_id"],
             "headers": connection_params.headers,
             "base_url": connection_params.base_url,
             "query_params": connection_params.queryParams,
         }
     except ComposioClientError:
-        return None
+        logging.get_logger().error(
+            f"Error fetching auth for runtime action of app {app!r}, "
+            "connected account for this account does not exist!"
+        )
+        return {
+            "entity_id": metadata["entity_id"],
+            "subdomain": metadata.pop("subdomain", {}),
+            "headers": metadata.pop("header", {}),
+            "base_url": metadata.pop("base_url", None),
+            "body_params": metadata.pop("body", {}),
+            "path_params": metadata.pop("path", {}),
+            "query_params": metadata.pop("query", {}),
+            **metadata,
+        }
 
 
 def _build_executable_from_args(  # pylint: disable=too-many-statements
@@ -302,7 +391,8 @@ def _build_executable_from_args(  # pylint: disable=too-many-statements
     }
 
     shell_argument = None
-    auth_params = False
+    auth_param = False
+    connected_account_param = False
     request_executor = False
     if "return" not in argspec.annotations:
         raise InvalidRuntimeAction(
@@ -315,7 +405,11 @@ def _build_executable_from_args(  # pylint: disable=too-many-statements
             continue
 
         if arg == "auth":
-            auth_params = True
+            auth_param = True
+            continue
+
+        if arg == "connected_account":
+            connected_account_param = True
             continue
 
         if arg == "execute_request":
@@ -375,10 +469,12 @@ def _build_executable_from_args(  # pylint: disable=too-many-statements
         if shell_argument is not None:
             kwargs[shell_argument] = metadata["workspace"].shells.recent
 
-        if auth_params > 0:
-            kwargs["auth"] = (
-                _get_auth_params(app=app, entity_id=metadata["entity_id"]) or {}
+        if connected_account_param:
+            kwargs["connected_account"] = (
+                _get_connected_account(app=app, entity_id=metadata["entity_id"]) or {}
             )
+        if auth_param:
+            kwargs["auth"] = _get_auth_params(app=app, metadata=metadata)
 
         if request_executor:
             toolset = t.cast("ComposioToolSet", metadata["_toolset"])
@@ -419,7 +515,7 @@ def _build_executable_from_args(  # pylint: disable=too-many-statements
 def _build_executable_from_request_class(f: t.Callable, app: str) -> t.Callable:
     def execute(request: BaseModel, metadata: t.Dict) -> BaseModel:
         """Wrapper for action callable."""
-        auth_data = _get_auth_params(app=app, entity_id=metadata["entity_id"])
+        auth_data = _get_auth_params(app=app, metadata=metadata)
         if auth_data is not None:
             metadata.update(auth_data)
         return f(request, metadata)

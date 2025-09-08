@@ -5,6 +5,7 @@ OpenAI tool spec.
 import json
 import time
 import typing as t
+import warnings
 
 import typing_extensions as te
 from openai import Client
@@ -18,15 +19,18 @@ from openai.types.chat.chat_completion_tool_param import ChatCompletionToolParam
 
 from composio import ActionType, AppType, TagType
 from composio.constants import DEFAULT_ENTITY_ID
+from composio.exceptions import InvalidEntityIdError
 from composio.tools import ComposioToolSet as BaseComposioToolSet
 from composio.tools.schema import OpenAISchema, SchemaType
 from composio.tools.toolset import ProcessorsType
+from composio.utils import help_msg
 
 
 class ComposioToolSet(
     BaseComposioToolSet,
     runtime="openai",
     description_char_limit=1024,
+    action_name_char_limit=64,
 ):
     """
     Composio toolset for OpenAI framework.
@@ -77,7 +81,7 @@ class ComposioToolSet(
             and entity_id != DEFAULT_ENTITY_ID
             and self.entity_id != entity_id
         ):
-            raise ValueError(
+            raise InvalidEntityIdError(
                 "separate `entity_id` can not be provided during "
                 "initialization and handelling tool calls"
             )
@@ -85,7 +89,7 @@ class ComposioToolSet(
             entity_id = self.entity_id
         return entity_id
 
-    @te.deprecated("Use `ComposioToolSet.get_tools` instead")
+    @te.deprecated("Use `ComposioToolSet.get_tools` instead.\n", category=None)
     def get_actions(
         self, actions: t.Sequence[ActionType]
     ) -> t.List[ChatCompletionToolParam]:
@@ -95,6 +99,11 @@ class ComposioToolSet(
         :param actions: List of actions to wrap
         :return: Composio tools wrapped as `ChatCompletionToolParam` objects
         """
+        warnings.warn(
+            "Use `ComposioToolSet.get_tools` instead.\n" + help_msg(),
+            DeprecationWarning,
+            stacklevel=2,
+        )
         return self.get_tools(actions=actions)
 
     def get_tools(
@@ -117,7 +126,8 @@ class ComposioToolSet(
         """
         self.validate_tools(apps=apps, actions=actions, tags=tags)
         if processors is not None:
-            self._merge_processors(processors)
+            self._processor_helpers.merge_processors(processors)
+
         return [
             ChatCompletionToolParam(  # type: ignore
                 **t.cast(
@@ -134,6 +144,7 @@ class ComposioToolSet(
                 apps=apps,
                 tags=tags,
                 check_connected_accounts=check_connected_accounts,
+                _populate_requested=True,
             )
         ]
 
@@ -167,6 +178,7 @@ class ComposioToolSet(
         self,
         tool_call: ChatCompletionMessageToolCall,
         entity_id: t.Optional[str] = None,
+        check_requested_actions: bool = True,
     ) -> t.Dict:
         """
         Execute a tool call.
@@ -179,12 +191,14 @@ class ComposioToolSet(
             action=tool_call.function.name,
             params=json.loads(tool_call.function.arguments),
             entity_id=entity_id or self.entity_id,
+            _check_requested_actions=check_requested_actions,
         )
 
     def handle_tool_calls(
         self,
         response: ChatCompletion,
         entity_id: t.Optional[str] = None,
+        check_requested_actions: bool = True,
     ) -> t.List[t.Dict]:
         """
         Handle tool calls from OpenAI chat completion object.
@@ -204,6 +218,7 @@ class ComposioToolSet(
                             self.execute_tool_call(
                                 tool_call=tool_call,
                                 entity_id=entity_id or self.entity_id,
+                                check_requested_actions=check_requested_actions,
                             )
                         )
         return outputs
@@ -212,6 +227,7 @@ class ComposioToolSet(
         self,
         run: Run,
         entity_id: t.Optional[str] = None,
+        check_requested_actions: bool = True,
     ) -> t.List:
         """Wait and handle assistant function calls"""
         tool_outputs = []
@@ -221,6 +237,7 @@ class ComposioToolSet(
             tool_response = self.execute_tool_call(
                 tool_call=t.cast(ChatCompletionMessageToolCall, tool_call),
                 entity_id=entity_id or self.entity_id,
+                check_requested_actions=check_requested_actions,
             )
             tool_output = {
                 "tool_call_id": tool_call.id,

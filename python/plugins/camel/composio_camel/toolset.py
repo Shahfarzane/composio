@@ -3,6 +3,7 @@ Camel tool spec.
 """
 
 import typing as t
+import warnings
 
 import typing_extensions as te
 
@@ -11,9 +12,11 @@ from camel.toolkits import OpenAIFunction
 
 from composio import Action, ActionType, AppType, TagType
 from composio.constants import DEFAULT_ENTITY_ID
+from composio.exceptions import InvalidEntityIdError
 from composio.tools import ComposioToolSet as BaseComposioToolSet
 from composio.tools.schema import OpenAISchema, SchemaType
 from composio.tools.toolset import ProcessorsType
+from composio.utils import help_msg
 
 
 # pylint: enable=E0611
@@ -23,6 +26,7 @@ class ComposioToolSet(
     BaseComposioToolSet,
     runtime="camel",
     description_char_limit=1024,
+    action_name_char_limit=64,
 ):
     """
     Composio toolset for OpenAI framework.
@@ -99,7 +103,7 @@ class ComposioToolSet(
             and entity_id != DEFAULT_ENTITY_ID
             and self.entity_id != entity_id
         ):
-            raise ValueError(
+            raise InvalidEntityIdError(
                 "Separate `entity_id` can not be provided during "
                 "initialization and handling tool calls"
             )
@@ -123,6 +127,7 @@ class ComposioToolSet(
                 action=Action(value=name),
                 params=kwargs,
                 entity_id=entity_id or self.entity_id,
+                _check_requested_actions=True,
             )
 
         return OpenAIFunction(
@@ -130,7 +135,7 @@ class ComposioToolSet(
             openai_tool_schema=schema,
         )
 
-    @te.deprecated("Use `ComposioToolSet.get_tools` instead")
+    @te.deprecated("Use `ComposioToolSet.get_tools` instead.\n", category=None)
     def get_actions(
         self,
         actions: t.Sequence[ActionType],
@@ -144,6 +149,11 @@ class ComposioToolSet(
 
         :return: Composio tools wrapped as `OpenAIFunction` objects
         """
+        warnings.warn(
+            "Use `ComposioToolSet.get_tools` instead.\n" + help_msg(),
+            DeprecationWarning,
+            stacklevel=2,
+        )
         return self.get_tools(actions=actions, entity_id=entity_id)
 
     def get_tools(
@@ -168,7 +178,7 @@ class ComposioToolSet(
         """
         self.validate_tools(apps=apps, actions=actions, tags=tags)
         if processors is not None:
-            self._merge_processors(processors)
+            self._processor_helpers.merge_processors(processors)
         return [
             self._wrap_tool(  # type: ignore
                 t.cast(
@@ -186,5 +196,6 @@ class ComposioToolSet(
                 apps=apps,
                 tags=tags,
                 check_connected_accounts=check_connected_accounts,
+                _populate_requested=True,
             )
         ]

@@ -1,6 +1,13 @@
 import typing as t
+import warnings
 
 import typing_extensions as te
+
+from composio.exceptions import (
+    ErrorProcessingToolExecutionRequest,
+    InvalidEntityIdError,
+)
+from composio.utils import help_msg
 
 
 try:
@@ -27,6 +34,7 @@ class ComposioToolSet(
     BaseComposioToolSet,
     runtime="claude",
     description_char_limit=1024,
+    action_name_char_limit=64,
 ):
     """
     Composio toolset for Anthropic Claude platform.
@@ -77,7 +85,7 @@ class ComposioToolSet(
             and entity_id != DEFAULT_ENTITY_ID
             and self.entity_id != entity_id
         ):
-            raise ValueError(
+            raise InvalidEntityIdError(
                 "separate `entity_id` can not be provided during "
                 "initialization and handelling tool calls"
             )
@@ -85,7 +93,7 @@ class ComposioToolSet(
             entity_id = self.entity_id
         return entity_id
 
-    @te.deprecated("Use `ComposioToolSet.get_tools` instead")
+    @te.deprecated("Use `ComposioToolSet.get_tools` instead.\n", category=None)
     def get_actions(self, actions: t.Sequence[ActionType]) -> t.List[ToolParam]:
         """
         Get composio tools wrapped as `ToolParam` objects.
@@ -93,6 +101,11 @@ class ComposioToolSet(
         :param actions: List of actions to wrap
         :return: Composio tools wrapped as `ToolParam` objects
         """
+        warnings.warn(
+            "Use `ComposioToolSet.get_tools` instead.\n" + help_msg(),
+            DeprecationWarning,
+            stacklevel=2,
+        )
         return self.get_tools(actions=actions)
 
     def get_tools(
@@ -115,7 +128,7 @@ class ComposioToolSet(
         """
         self.validate_tools(apps=apps, actions=actions, tags=tags)
         if processors is not None:
-            self._merge_processors(processors)
+            self._processor_helpers.merge_processors(processors)
         return [
             ToolParam(
                 **t.cast(
@@ -132,6 +145,7 @@ class ComposioToolSet(
                 apps=apps,
                 tags=tags,
                 check_connected_accounts=check_connected_accounts,
+                _populate_requested=True,
             )
         ]
 
@@ -151,11 +165,12 @@ class ComposioToolSet(
             action=Action(value=tool_call.name),
             params=t.cast(t.Dict, tool_call.input),
             entity_id=entity_id or self.entity_id,
+            _check_requested_actions=True,
         )
 
     def handle_tool_calls(
         self,
-        llm_response: ToolsBetaMessage,
+        llm_response: t.Union[dict, ToolsBetaMessage],
         entity_id: t.Optional[str] = None,
     ) -> t.List[t.Dict]:
         """
@@ -166,6 +181,16 @@ class ComposioToolSet(
         :param entity_id: Entity ID to use for executing function calls.
         :return: A list of output objects from the function calls.
         """
+        # Since llm_response can also be a dictionary, we should only proceed
+        # towards action execution if we have the correct type of llm_response
+        if not isinstance(llm_response, (dict, ToolsBetaMessage)):
+            raise ErrorProcessingToolExecutionRequest(
+                "llm_response should be of type `Message` or castable to type `Message`, "
+                f"received object {llm_response} of type {type(llm_response)}"
+            )
+        if isinstance(llm_response, dict):
+            llm_response = ToolsBetaMessage(**llm_response)
+
         outputs = []
         entity_id = self.validate_entity_id(entity_id or self.entity_id)
         for content in llm_response.content:

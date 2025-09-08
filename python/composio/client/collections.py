@@ -2,10 +2,8 @@
 Composio server object collections
 """
 
-import base64
 import difflib
 import json
-import os
 import time
 import traceback
 import typing as t
@@ -32,16 +30,43 @@ from composio.client.enums import (
     Trigger,
     TriggerType,
 )
-from composio.client.exceptions import ComposioClientError, ComposioSDKError
-from composio.constants import PUSHER_CLUSTER, PUSHER_KEY
-from composio.utils import logging
+from composio.constants import DEFAULT_ENTITY_ID, PUSHER_CLUSTER, PUSHER_KEY
+from composio.exceptions import (
+    ErrorFetchingResource,
+    InvalidParams,
+    InvalidTriggerFilters,
+    SDKTimeoutError,
+    TriggerSubscriptionError,
+)
+from composio.utils import help_msg, logging
 from composio.utils.shared import generate_request_id
 
 
 if t.TYPE_CHECKING:
     from composio.client import Composio
-
-AUTH_SCHEMES = ("OAUTH2", "OAUTH1", "API_KEY", "BASIC", "BEARER_TOKEN")
+ALL_AUTH_SCHEMES = (
+    "OAUTH2",
+    "OAUTH1",
+    "API_KEY",
+    "BASIC",
+    "BEARER_TOKEN",
+    "BASIC_WITH_JWT",
+    "GOOGLE_SERVICE_ACCOUNT",
+    "GOOGLEADS_AUTH",
+    "NO_AUTH",
+    "CALCOM_AUTH",
+)
+AUTH_SCHEME_WITH_INITIATE = (
+    "OAUTH2",
+    "OAUTH1",
+    "API_KEY",
+    "BASIC",
+    "BEARER_TOKEN",
+    "BASIC_WITH_JWT",
+    "GOOGLE_SERVICE_ACCOUNT",
+    "GOOGLEADS_AUTH",
+    "CALCOM_AUTH",
+)
 AuthSchemeType = t.Literal[
     "OAUTH2",
     "OAUTH1",
@@ -49,6 +74,10 @@ AuthSchemeType = t.Literal[
     "BASIC",
     "BEARER_TOKEN",
     "BASIC_WITH_JWT",
+    "GOOGLE_SERVICE_ACCOUNT",
+    "GOOGLEADS_AUTH",
+    "NO_AUTH",
+    "CALCOM_AUTH",
 ]
 
 
@@ -69,6 +98,7 @@ class AuthConnectionParamsModel(BaseModel):
     client_id: t.Optional[str] = None
     token_type: t.Optional[str] = None
     access_token: t.Optional[str] = None
+    refresh_token: t.Optional[str] = None
     client_secret: t.Optional[str] = None
     consumer_id: t.Optional[str] = None
     consumer_secret: t.Optional[str] = None
@@ -91,7 +121,7 @@ class ConnectedAccountModel(BaseModel):
     connectionParams: AuthConnectionParamsModel
 
     clientUniqueUserId: t.Optional[str] = None
-    entityId: t.Optional[str] = None
+    entityId: str = DEFAULT_ENTITY_ID
 
     # Override arbitrary model config.
     model_config: ConfigDict = ConfigDict(  # type: ignore
@@ -132,7 +162,7 @@ class ConnectionRequestModel(BaseModel):
     def wait_until_active(
         self,
         client: "Composio",
-        timeout=60,
+        timeout: float = 60.0,
     ) -> "ConnectedAccountModel":
         start_time = time.time()
         while time.time() - start_time < timeout:
@@ -143,8 +173,7 @@ class ConnectionRequestModel(BaseModel):
                 return connection
             time.sleep(1)
 
-        # TODO: Replace with timeout error.
-        raise ComposioClientError(
+        raise SDKTimeoutError(
             "Connection did not become active within the timeout period."
         )
 
@@ -187,7 +216,7 @@ class ConnectedAccounts(Collection[ConnectedAccountModel]):
     @t.overload
     def get(
         self,
-        connection_id: t.Optional[str] = None,
+        *,
         entity_ids: t.Optional[t.Sequence[str]] = None,
         active: bool = False,
     ) -> t.List[ConnectedAccountModel]:
@@ -202,6 +231,7 @@ class ConnectedAccounts(Collection[ConnectedAccountModel]):
     def get(
         self,
         connection_id: t.Optional[str] = None,
+        *,
         entity_ids: t.Optional[t.Sequence[str]] = None,
         active: bool = False,
     ) -> t.Union[ConnectedAccountModel, t.List[ConnectedAccountModel]]:
@@ -216,8 +246,11 @@ class ConnectedAccounts(Collection[ConnectedAccountModel]):
         """
         entity_ids = entity_ids or ()
         if connection_id is not None and len(entity_ids) > 0:
-            raise ComposioClientError(
-                message="Cannot use both `connection_id` and `entity_ids` parameters as filter"
+            raise InvalidParams(
+                message=(
+                    "Cannot use both `connection_id` and `entity_ids` "
+                    "parameters as filter"
+                )
             )
 
         if connection_id is not None:
@@ -228,7 +261,7 @@ class ConnectedAccounts(Collection[ConnectedAccountModel]):
             )
             return self.model(**response.json())
 
-        queries = {}
+        queries = {"pageSize": "99999999"}
         if len(entity_ids) > 0:
             queries["user_uuid"] = ",".join(entity_ids)
 
@@ -351,7 +384,6 @@ class Apps(Collection[AppModel]):
                     )
                 ).json()
             )
-
         return super().get(queries={})
 
 
@@ -363,7 +395,7 @@ class TriggerPayloadPropertyModel(BaseModel):
     """Trigger payload property data model."""
 
     description: str
-    title: str
+    title: t.Optional[str] = None
     type: t.Optional[str] = None
     anyOf: t.Optional[t.List[TypeModel]] = None
 
@@ -374,7 +406,7 @@ class TriggerPayloadModel(BaseModel):
     """Trigger payload data model."""
 
     properties: t.Dict[str, TriggerPayloadPropertyModel]
-    title: str
+    title: t.Optional[str] = None
     type: t.Optional[str] = None
     anyOf: t.Optional[t.List[TypeModel]] = None
 
@@ -386,6 +418,7 @@ class TriggerConfigPropertyModel(BaseModel):
 
     description: str
     title: str
+    default: t.Any = None
 
     type: t.Optional[str] = None
 
@@ -531,12 +564,11 @@ class TriggerSubscription(logging.WithLogger):
         self._chunks: t.Dict[str, t.Dict[int, str]] = {}
         self._callbacks: t.List[t.Tuple[TriggerCallback, _TriggerEventFilters]] = []
 
+    # pylint: disable=too-many-statements
     def validate_filters(self, filters: _TriggerEventFilters):
         docs_link_msg = "\nRead more here: https://docs.composio.dev/introduction/intro/quickstart_3"
         if not isinstance(filters, dict):
-            raise ComposioSDKError(
-                "Expected filters to be a dictionary" + docs_link_msg
-            )
+            raise InvalidParams("Expected filters to be a dictionary" + docs_link_msg)
 
         expected_filters = list(_TriggerEventFilters.__annotations__)
         for filter, value in filters.items():
@@ -548,32 +580,33 @@ class TriggerSubscription(logging.WithLogger):
                 if possible_values:
                     (possible_value,) = possible_values
                     error_msg += f" Did you mean {possible_value!r}?"
-                raise ComposioSDKError(error_msg + docs_link_msg)
+                raise InvalidTriggerFilters(error_msg + docs_link_msg)
 
             # Validate app name
             if filter == "app_name":
                 if isinstance(value, App):
-                    value = value.slug
-
-                elif not isinstance(value, str):
-                    raise ComposioSDKError(
+                    slug = value.slug
+                elif isinstance(value, str):
+                    slug = value
+                else:
+                    raise InvalidTriggerFilters(
                         f"Expected 'app_name' to be App or str, found {value!r}"
                         + docs_link_msg
                     )
 
                 # Our enums are in uppercase but we accept lowercase ones too.
-                value = value.upper()
+                slug = slug.upper()
 
                 # Ensure the app exists
                 app_names = list(App.iter())
-                if value not in app_names:
-                    error_msg = f"App {value!r} does not exist."
-                    possible_values = difflib.get_close_matches(value, app_names, n=1)
+                if slug not in app_names:
+                    error_msg = f"App {slug!r} does not exist."
+                    possible_values = difflib.get_close_matches(slug, app_names, n=1)
                     if possible_values:
                         (possible_value,) = possible_values
                         error_msg += f" Did you mean {possible_value!r}?"
 
-                    raise ComposioSDKError(error_msg + docs_link_msg)
+                    raise InvalidTriggerFilters(error_msg + docs_link_msg)
 
                 # Ensure at least one of the app's triggers are enabled on the account.
                 active_triggers = [
@@ -582,49 +615,51 @@ class TriggerSubscription(logging.WithLogger):
                 apps_for_triggers = {
                     Trigger(trigger).app.upper() for trigger in active_triggers
                 }
-                if value not in apps_for_triggers:
+                if slug not in apps_for_triggers:
                     error_msg = (
-                        f"App {value!r} has no triggers enabled on your account.\n"
+                        f"App {slug!r} has no triggers enabled on your account.\n"
                         "Find the possible triggers by running `composio triggers`."
                     )
-                    raise ComposioSDKError(error_msg + docs_link_msg)
+                    raise InvalidTriggerFilters(error_msg + docs_link_msg)
 
             # Validate trigger name
             if filter == "trigger_name":
                 if isinstance(value, Trigger):
-                    value = value.slug
-                elif not isinstance(value, str):
-                    raise ComposioSDKError(
+                    slug = value.slug
+                elif isinstance(value, str):
+                    slug = value
+                else:
+                    raise InvalidTriggerFilters(
                         f"Expected 'trigger_name' to be Trigger or str, found {value!r}"
                         + docs_link_msg
                     )
 
                 # Our enums are in uppercase but we accept lowercase ones too.
-                value = value.upper()
+                slug = slug.upper()
 
                 # Ensure the trigger exists
                 trigger_names = list(Trigger.iter())
-                if value not in trigger_names:
-                    error_msg = f"Trigger {value!r} does not exist."
+                if slug not in trigger_names:
+                    error_msg = f"Trigger {slug!r} does not exist."
                     possible_values = difflib.get_close_matches(
-                        value, trigger_names, n=1
+                        slug, trigger_names, n=1
                     )
                     if possible_values:
                         (possible_value,) = possible_values
                         error_msg += f" Did you mean {possible_value!r}?"
 
-                    raise ComposioSDKError(error_msg + docs_link_msg)
+                    raise InvalidTriggerFilters(error_msg + docs_link_msg)
 
                 # Ensure the trigger is added on your account
                 active_triggers = [
                     trigger.triggerName for trigger in self.client.active_triggers.get()
                 ]
-                if value not in active_triggers:
+                if slug not in active_triggers:
                     error_msg = (
-                        f"Trigger {value!r} is not enabled on your account.\nEnable"
-                        f" the trigger by doing `composio triggers enable {value}`."
+                        f"Trigger {slug!r} is not enabled on your account.\nEnable"
+                        f" the trigger by doing `composio triggers enable {slug}`."
                     )
-                    raise ComposioSDKError(error_msg + docs_link_msg)
+                    raise InvalidTriggerFilters(error_msg + docs_link_msg)
 
     def callback(
         self,
@@ -691,7 +726,7 @@ class TriggerSubscription(logging.WithLogger):
             self.logger.error(f"Error parsing trigger payload: {event}")
             return
 
-        self.logger.info(
+        self.logger.debug(
             f"Received trigger event with trigger ID: {data.metadata.id} "
             f"and trigger name: {data.metadata.triggerName}"
         )
@@ -825,6 +860,7 @@ class _PusherClient(logging.WithLogger):
                 "x-api-key": self.api_key,
                 "x-request-id": generate_request_id(),
             },
+            auto_sub=True,
         )
 
         # Patch pusher logger
@@ -847,7 +883,7 @@ class _PusherClient(logging.WithLogger):
                 return self.subscription
             time.sleep(0.5)
 
-        raise TimeoutError(
+        raise SDKTimeoutError(
             "Timed out while waiting for trigger listener to be established"
         )
 
@@ -919,9 +955,20 @@ class Triggers(Collection[TriggerModel]):
         )
         return response.json()
 
+    def delete(self, id: str) -> t.Dict:
+        """
+        Delete a trigger
+
+        :param id: ID of the trigger to be deleted
+        """
+        response = self._raise_if_required(
+            self.client.http.delete(url=str(self.endpoint / "instance" / id))
+        )
+        return response.json()
+
     def subscribe(self, timeout: float = 15.0) -> TriggerSubscription:
         """Subscribe to a trigger and receive trigger events."""
-        self.logger.info("Creating trigger subscription")
+        self.logger.debug("Creating trigger subscription")
         response = self._raise_if_required(
             response=self.client.http.get(
                 url="/v1/client/auth/client_info",
@@ -929,7 +976,7 @@ class Triggers(Collection[TriggerModel]):
         )
         client_id = response.json().get("client", {}).get("id")
         if client_id is None:
-            raise ComposioClientError("Error fetching client ID")
+            raise TriggerSubscriptionError("Error fetching client ID")
 
         pusher = _PusherClient(
             client_id=client_id,
@@ -978,61 +1025,45 @@ class ActiveTriggers(Collection[ActiveTriggerModel]):
             queries["integrationIds"] = ",".join(integration_ids)
         if len(trigger_names) > 0:
             queries["triggerNames"] = to_trigger_names(trigger_names)
-        return self._raise_if_empty(super().get(queries=queries))
+        return super().get(queries=queries)
 
 
-def _check_file_uploadable(param_field: dict) -> bool:
-    return (
-        isinstance(param_field, dict)
-        and (param_field.get("title") in ["File", "FileType"])
-        and all(
-            field_name in param_field.get("properties", {})
-            for field_name in ["name", "content"]
-        )
-    )
+class OpenAPISchema(BaseModel):
+    properties: t.Dict[str, t.Any]
+    title: str
+    type: str
+    required: t.Optional[t.List[str]] = None
+    examples: t.Optional[t.List[t.Any]] = None
 
 
-def _check_file_downloadable(param_field: dict) -> bool:
-    return set(param_field.keys()) == {"name", "content"}
-
-
-class ActionParametersModel(BaseModel):
+class ActionParametersModel(OpenAPISchema):
     """Action parameter data models."""
 
-    properties: t.Dict[str, t.Any]
-    title: str
-    type: str
 
-    required: t.Optional[t.List[str]] = None
-
-
-class ActionResponseModel(BaseModel):
+class ActionResponseModel(OpenAPISchema):
     """Action response data model."""
-
-    properties: t.Dict[str, t.Any]
-    title: str
-    type: str
-
-    required: t.Optional[t.List[str]] = None
 
 
 class ActionModel(BaseModel):
     """Action data model."""
 
     name: str
-    display_name: t.Optional[str] = None
+    description: str
     parameters: ActionParametersModel
     response: ActionResponseModel
     appName: str
     appId: str
+    version: str
+    available_versions: t.List[str]
+
     tags: t.List[str]
+    logo: t.Optional[str] = None
+
+    display_name: t.Optional[str] = None
     enabled: bool = False
 
-    logo: t.Optional[str] = None
-    description: t.Optional[str] = None
 
-
-ParamPlacement = t.Literal["header", "path", "query", "subdomain"]
+ParamPlacement = t.Literal["header", "path", "query", "subdomain", "metadata"]
 
 
 class CustomAuthParameter(te.TypedDict):
@@ -1067,14 +1098,32 @@ class SearchResultTask(BaseModel):
     )
 
 
+class CreateUploadURLResponse(BaseModel):
+    id: str = Field(..., description="ID of the file")
+    url: str = Field(..., description="Onetime upload URL")
+    key: str = Field(..., description="S3 upload location")
+    exists: bool = Field(False, description="If the file already exists on S3")
+
+
 class Actions(Collection[ActionModel]):
     """Collection of composio actions.."""
 
     model = ActionModel
     endpoint = v2.actions
 
-    # TODO: Overload
-    def get(  # type: ignore
+    def _get_action(self, action: ActionType) -> ActionModel:
+        return self.model(
+            **self._raise_if_required(
+                response=self.client.http.get(
+                    url=str(self.endpoint / str(action)),
+                    params={
+                        "version": Action(action).version,
+                    },
+                )
+            ).json()
+        )
+
+    def _get_actions(
         self,
         actions: t.Optional[t.Sequence[ActionType]] = None,
         apps: t.Optional[t.Sequence[AppType]] = None,
@@ -1083,18 +1132,6 @@ class Actions(Collection[ActionModel]):
         use_case: t.Optional[str] = None,
         allow_all: bool = False,
     ) -> t.List[ActionModel]:
-        """
-        Get a list of apps by the specified filters.
-
-        :param actions: Filter by the list of Actions.
-        :param apps: Filter by the list of Apps.
-        :param tags: Filter by the list of given Tags.
-        :param limit: Limit the number of actions to a specific number.
-        :param use_case: Filter by use case.
-        :param allow_all: Allow querying all of the actions for a specific
-                        app
-        :return: List of actions
-        """
 
         def is_action(obj):
             try:
@@ -1131,23 +1168,22 @@ class Actions(Collection[ActionModel]):
             return [self.model(**item) for item in local_items]
 
         if len(actions) > 0 and len(apps) > 0:
-            raise ComposioClientError(
+            raise ErrorFetchingResource(
                 "Error retrieving Actions, Both actions and apps "
                 "cannot be used as filters at the same time."
             )
 
         if len(actions) > 0 and len(tags) > 0:
-            raise ComposioClientError(
+            raise ErrorFetchingResource(
                 "Error retrieving Actions, Both actions and tags "
                 "cannot be used as filters at the same time."
             )
 
         if len(apps) > 0 and len(tags) == 0 and not allow_all:
             warnings.warn(
-                "Using all the actions of an app is not recommended. "
-                "Please use tags to filter actions or provide specific actions. "
-                "We just pass the important actions to the agent, but this is not meant "
-                "to be used in production. Check out https://docs.composio.dev/sdk/python/actions for more information.",
+                "Using all actions of an app is not recommended for production."
+                "Learn more: https://docs.composio.dev/patterns/tools/use-tools/use-specific-actions\n\n"
+                + help_msg(),
                 UserWarning,
             )
             tags = ["important"]
@@ -1218,6 +1254,77 @@ class Actions(Collection[ActionModel]):
             items = [self.model(**item) for item in local_items] + items
         return items
 
+    @t.overload  # type: ignore
+    def get(self) -> t.List[ActionModel]: ...
+
+    @t.overload  # type: ignore
+    def get(self, action: t.Optional[ActionType] = None) -> ActionModel: ...
+
+    @t.overload  # type: ignore
+    def get(
+        self,
+        actions: t.Optional[t.Sequence[ActionType]] = None,
+        apps: t.Optional[t.Sequence[AppType]] = None,
+        tags: t.Optional[t.Sequence[TagType]] = None,
+        limit: t.Optional[int] = None,
+        use_case: t.Optional[str] = None,
+        allow_all: bool = False,
+    ) -> t.List[ActionModel]: ...
+
+    def get(  # type: ignore
+        self,
+        action: t.Optional[ActionType] = None,
+        *,
+        actions: t.Optional[t.Sequence[ActionType]] = None,
+        apps: t.Optional[t.Sequence[AppType]] = None,
+        tags: t.Optional[t.Sequence[TagType]] = None,
+        limit: t.Optional[int] = None,
+        use_case: t.Optional[str] = None,
+        allow_all: bool = False,
+    ) -> t.Union[ActionModel, t.List[ActionModel]]:
+        """
+        Get a list of apps by the specified filters.
+
+        :param actions: Filter by the list of Actions.
+        :param action: Get data for this action.
+        :param apps: Filter by the list of Apps.
+        :param tags: Filter by the list of given Tags.
+        :param limit: Limit the number of actions to a specific number.
+        :param use_case: Filter by use case.
+        :param allow_all: Allow querying all of the actions for a specific
+                        app
+        :return: List of actions
+        """
+        if action is not None:
+            return self._get_action(action=action)
+
+        return self._get_actions(
+            actions=actions,
+            apps=apps,
+            tags=tags,
+            limit=limit,
+            use_case=use_case,
+            allow_all=allow_all,
+        )
+
+    @staticmethod
+    def _serialize_auth(auth: t.Optional[CustomAuthObject]) -> t.Optional[t.Dict]:
+        if auth is None:
+            return None
+
+        data = auth.model_dump(exclude_none=True)
+        data["parameters"] = [
+            {"in": d["in_"], "name": d["name"], "value": d["value"]}
+            for d in data["parameters"]
+        ]
+        for param in data["parameters"]:
+            if param["in"] == "metadata":
+                raise InvalidParams(
+                    "Param placement cannot be 'metadata' for remote "
+                    f"action execution: {param}"
+                )
+        return data
+
     def execute(
         self,
         action: Action,
@@ -1227,6 +1334,7 @@ class Actions(Collection[ActionModel]):
         session_id: t.Optional[str] = None,
         text: t.Optional[str] = None,
         auth: t.Optional[CustomAuthObject] = None,
+        allow_tracing: bool = False,
     ) -> t.Dict:
         """
         Execute an action on the specified entity with optional connected account.
@@ -1238,77 +1346,44 @@ class Actions(Collection[ActionModel]):
         :param session_id: ID of the current workspace session
         :return: A dictionary containing the response from the executed action.
         """
-        # TOFIX: Remvoe this
-        if action.is_local:
-            return self.client.local.execute_action(action=action, request_data=params)
-
-        actions = self.get(actions=[action])
-        if len(actions) == 0:
-            raise ComposioClientError(f"Action {action} not found")
-
-        (action_model,) = actions
-        action_req_schema = action_model.parameters.properties
-        modified_params: t.Dict[str, t.Union[str, t.Dict[str, str]]] = {}
-        for param, value in params.items():
-            request_param_schema = action_req_schema[param]
-            file_readable = request_param_schema.get("file_readable", False)
-            file_uploadable = _check_file_uploadable(request_param_schema)
-
-            if file_readable and isinstance(value, str) and os.path.isfile(value):
-                with open(value, "rb") as file:
-                    file_content = file.read()
-                    try:
-                        modified_params[param] = file_content.decode("utf-8")
-                    except UnicodeDecodeError:
-                        # If decoding fails, treat as binary and encode in base64
-                        modified_params[param] = base64.b64encode(file_content).decode(
-                            "utf-8"
-                        )
-            elif file_uploadable and isinstance(value, str):
-                if not os.path.isfile(value):
-                    raise ValueError(f"Attachment File with path `{value}` not found.")
-
-                with open(value, "rb") as file:
-                    file_content = file.read()
-
-                modified_params[param] = {
-                    "name": os.path.basename(value),
-                    "content": base64.b64encode(file_content).decode("utf-8"),
-                }
-            else:
-                modified_params[param] = value
-
         if action.no_auth:
             return self._raise_if_required(
-                self.client.http.post(
+                self.client.long_timeout_http.post(
                     url=str(self.endpoint / action.slug / "execute"),
                     json={
                         "appName": action.app,
-                        "input": modified_params,
+                        "input": params,
                         "text": text,
+                        "version": action.version,
                         "sessionInfo": {
                             "sessionId": session_id,
                         },
+                        "allowTracing": allow_tracing,
                     },
                 )
             ).json()
 
         if connected_account is None and auth is None:
-            raise ComposioClientError(
+            raise InvalidParams(
                 "`connected_account` cannot be `None` when executing "
                 "an app which requires authentication"
             )
 
         return self._raise_if_required(
-            self.client.http.post(
+            self.client.long_timeout_http.post(
                 url=str(self.endpoint / action.slug / "execute"),
                 json={
                     "connectedAccountId": connected_account,
                     "entityId": entity_id,
                     "appName": action.app,
-                    "input": modified_params,
+                    "input": params,
                     "text": text,
+                    "version": action.version,
                     "authConfig": self._serialize_auth(auth=auth),
+                    "sessionInfo": {
+                        "sessionId": session_id,
+                    },
+                    "allowTracing": allow_tracing,
                 },
             )
         ).json()
@@ -1338,18 +1413,6 @@ class Actions(Collection[ActionModel]):
                 ],
             },
         ).json()
-
-    @staticmethod
-    def _serialize_auth(auth: t.Optional[CustomAuthObject]) -> t.Optional[t.Dict]:
-        if auth is None:
-            return None
-
-        data = auth.model_dump(exclude_none=True)
-        data["parameters"] = [
-            {"in": d["in_"], "name": d["name"], "value": d["value"]}
-            for d in data["parameters"]
-        ]
-        return data
 
     def search_for_a_task(
         self,
@@ -1383,6 +1446,29 @@ class Actions(Collection[ActionModel]):
             SearchResultTask.model_validate(task)
             for task in response.json().get("items", [])
         ]
+
+    def create_file_upload(
+        self,
+        app: str,
+        action: str,
+        filename: str,
+        mimetype: str,
+        md5: str,
+    ) -> CreateUploadURLResponse:
+        return CreateUploadURLResponse(
+            **self._raise_if_required(
+                response=self.client.http.post(
+                    url=str(self.endpoint / "files" / "upload" / "request"),
+                    json={
+                        "md5": md5,
+                        "app": app,
+                        "action": action,
+                        "filename": filename,
+                        "mimetype": mimetype,
+                    },
+                )
+            ).json()
+        )
 
 
 class ExpectedFieldInput(BaseModel):
@@ -1477,13 +1563,28 @@ class Integrations(Collection[IntegrationModel]):
         self.client.http.delete(url=str(self.endpoint / id))
 
     @t.overload  # type: ignore
-    def get(self) -> t.List[IntegrationModel]: ...
+    def get(
+        self,
+        *,
+        page_size: t.Optional[int] = None,
+        page: t.Optional[int] = None,
+        app_id: t.Optional[str] = None,
+        app_name: t.Optional[str] = None,
+        show_disabled: t.Optional[bool] = None,
+    ) -> t.List[IntegrationModel]: ...
 
     @t.overload
     def get(self, id: t.Optional[str] = None) -> IntegrationModel: ...
 
     def get(
-        self, id: t.Optional[str] = None
+        self,
+        id: t.Optional[str] = None,
+        *,
+        page_size: t.Optional[int] = None,
+        page: t.Optional[int] = None,
+        app_id: t.Optional[str] = None,
+        app_name: t.Optional[str] = None,
+        show_disabled: t.Optional[bool] = None,
     ) -> t.Union[t.List[IntegrationModel], IntegrationModel]:
         if id is not None:
             return IntegrationModel(
@@ -1491,7 +1592,23 @@ class Integrations(Collection[IntegrationModel]):
                     self.client.http.get(url=str(self.endpoint / id))
                 ).json()
             )
-        return super().get({})
+        quries = {}
+        if page_size is not None:
+            quries["pageSize"] = json.dumps(page_size)
+
+        if page is not None:
+            quries["page"] = json.dumps(page)
+
+        if app_id is not None:
+            quries["appId"] = app_id
+
+        if app_name is not None:
+            quries["appName"] = app_name
+
+        if show_disabled is not None:
+            quries["showDisabled"] = json.dumps(show_disabled)
+
+        return super().get(queries=quries)
 
     @te.deprecated("`get_id` is deprecated, use `get(id=id)`")
     def get_by_id(
@@ -1524,4 +1641,8 @@ class Logs(Collection[LogRecord]):
 
     def push(self, record: t.Dict) -> None:
         """Push logs to composio."""
+        # TODO: handle this better
+        if self.client._api_key is None:  # pylint: disable=protected-access
+            return
+
         self.client.http.post(url=str(self.endpoint), json=record)

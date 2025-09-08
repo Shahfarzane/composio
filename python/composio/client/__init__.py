@@ -6,12 +6,11 @@ import os
 import sys
 import typing as t
 from datetime import datetime
-from pathlib import Path
 
 import requests
 
 from composio.client.collections import (
-    AUTH_SCHEMES,
+    AUTH_SCHEME_WITH_INITIATE,
     Actions,
     ActiveTriggerModel,
     ActiveTriggers,
@@ -41,11 +40,12 @@ from composio.client.http import HttpClient
 from composio.constants import (
     DEFAULT_ENTITY_ID,
     ENV_COMPOSIO_API_KEY,
-    LOCAL_CACHE_DIRECTORY_NAME,
+    LOCAL_CACHE_DIRECTORY,
     USER_DATA_FILE_NAME,
 )
-from composio.exceptions import ApiKeyNotProvidedError
+from composio.exceptions import ApiKeyError, ApiKeyNotProvidedError, InvalidParams
 from composio.storage.user import UserData
+from composio.utils.decorators import deprecated
 from composio.utils.shared import generate_request_id
 from composio.utils.url import get_api_url_base
 
@@ -60,6 +60,7 @@ class Composio:
     local: t.Any
     _api_key: t.Optional[str] = None
     _http: t.Optional[HttpClient] = None
+    _long_timeout_http: t.Optional[HttpClient] = None
 
     def __init__(
         self,
@@ -97,19 +98,20 @@ class Composio:
     @property
     def api_key(self) -> str:
         if self._api_key is None:
-            cache_dir = Path.home() / LOCAL_CACHE_DIRECTORY_NAME
-            user_data_path = cache_dir / USER_DATA_FILE_NAME
+            user_data_path = LOCAL_CACHE_DIRECTORY / USER_DATA_FILE_NAME
             user_data = (
                 UserData.load(path=user_data_path) if user_data_path.exists() else None
             )
             env_api_key = (
-                user_data.api_key if user_data else os.environ.get(ENV_COMPOSIO_API_KEY)
+                user_data.api_key
+                if user_data is not None and user_data.api_key is not None
+                else os.environ.get(ENV_COMPOSIO_API_KEY)
             )
             if env_api_key:
                 self._api_key = env_api_key
 
         if self._api_key is None:
-            raise ApiKeyNotProvidedError()
+            raise ApiKeyNotProvidedError
 
         self._api_key = self.validate_api_key(
             key=t.cast(str, self._api_key),
@@ -136,6 +138,21 @@ class Composio:
     def http(self, value: HttpClient) -> None:
         self._http = value
 
+    @property
+    def long_timeout_http(self) -> HttpClient:
+        if not self._long_timeout_http:
+            self._long_timeout_http = HttpClient(
+                base_url=self.base_url,
+                api_key=self.api_key,
+                runtime=self.runtime,
+                timeout=180.0,
+            )
+        return self._long_timeout_http
+
+    @long_timeout_http.setter
+    def long_timeout_http(self, value: HttpClient) -> None:
+        self._long_timeout_http = value
+
     @staticmethod
     def validate_api_key(key: str, base_url: t.Optional[str] = None) -> str:
         """Validate given API key."""
@@ -152,10 +169,10 @@ class Composio:
             timeout=60,
         )
         if response.status_code in (401, 403):
-            raise ComposioClientError("API Key is not valid!")
+            raise ApiKeyError("API Key is not valid!")
 
         if response.status_code != 200:
-            raise ComposioClientError(f"Unexpected error: HTTP {response.status_code}")
+            raise ApiKeyError(f"Unexpected error: HTTP {response.status_code}")
 
         _valid_keys.add(key)
         return key
@@ -228,6 +245,7 @@ class Entity:
         self.client = client
         self.id = id
 
+    @deprecated(version="0.5.52", replacement="execute_action")
     def execute(
         self,
         action: Action,
@@ -247,6 +265,20 @@ class Entity:
         :param session_id: ID of the current workspace session
         :return: Dictionary containing execution result
         """
+        return self._execute(
+            action, params, connected_account_id, session_id, text, auth
+        )
+
+    def _execute(
+        self,
+        action: Action,
+        params: t.Dict,
+        connected_account_id: t.Optional[str] = None,
+        session_id: t.Optional[str] = None,
+        text: t.Optional[str] = None,
+        auth: t.Optional[CustomAuthObject] = None,
+        allow_tracing: bool = False,
+    ) -> t.Dict:
         if action.no_auth:
             return self.client.actions.execute(
                 action=action,
@@ -254,6 +286,7 @@ class Entity:
                 entity_id=self.id,
                 session_id=session_id,
                 text=text,
+                allow_tracing=allow_tracing,
             )
 
         if auth is not None:
@@ -264,6 +297,7 @@ class Entity:
                 session_id=session_id,
                 text=text,
                 auth=auth,
+                allow_tracing=allow_tracing,
             )
 
         connected_account = self.get_connection(
@@ -279,6 +313,7 @@ class Entity:
             session_id=session_id,
             text=text,
             auth=auth,
+            allow_tracing=allow_tracing,
         )
 
     def get_connection(
@@ -311,7 +346,7 @@ class Entity:
                 creation_date = datetime.fromisoformat(
                     connected_account.createdAt.replace("Z", "+00:00")
                 )
-                if latest_account is None or creation_date > latest_creation_date:
+                if latest_account is None or creation_date < latest_creation_date:
                     latest_creation_date = creation_date
                     latest_account = connected_account
 
@@ -384,6 +419,7 @@ class Entity:
 
     def initiate_connection(
         self,
+        # TODO: Rename this parameter to 'app'
         app_name: t.Union[str, App],
         auth_mode: t.Optional[str] = None,
         auth_config: t.Optional[t.Dict[str, t.Any]] = None,
@@ -404,19 +440,18 @@ class Entity:
         :param integration: Optional existing IntegrationModel instance to be used.
         :return: A ConnectionRequestModel instance representing the initiated connection.
         """
-        if isinstance(app_name, App):
-            app_name = app_name.slug
-
-        app = self.client.apps.get(name=app_name)
+        app = self.client.apps.get(name=App(app_name).slug)
         timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
         if integration is None and auth_mode is not None:
-            if auth_mode not in AUTH_SCHEMES:
-                raise ComposioClientError(
-                    f"'auth_mode' should be one of {AUTH_SCHEMES}"
+            if auth_mode not in AUTH_SCHEME_WITH_INITIATE:
+                raise InvalidParams(
+                    f"'auth_mode' should be one of {AUTH_SCHEME_WITH_INITIATE}"
                 )
+
             auth_mode = t.cast(AuthSchemeType, auth_mode)
             if "OAUTH" not in auth_mode:
                 use_composio_auth = False
+
             integration = self.client.integrations.create(
                 app_id=app.appId,
                 name=f"{app_name}_{timestamp}",

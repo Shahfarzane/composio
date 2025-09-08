@@ -38,7 +38,7 @@ core_requirements = [
     "jsonschema>=4.21.1,<5",
     "sentry-sdk>=2.0.0",
     "pysher==1.0.8",
-    "pydantic>=2.6.4,<2.10",
+    "pydantic>=2.6.4",
     "importlib-metadata>=4.8.1",
     "jsonref>=1.1.0",
     "inflection>=0.5.1",
@@ -47,15 +47,17 @@ core_requirements = [
     "click",
     "rich>=13.7.1,<14",
     "pyperclip>=1.8.2,<2",
+    "Pillow>=10.2.0,<11",  # For image clipboard support
     # Workspace dependencies
     "paramiko>=3.4.1",  # Host workspace
     # Tooling server dependencies
     "fastapi",
     "uvicorn",
+    "pyyaml>=6.0.2",
 ]
 
 e2b_workspace_requirements = [
-    "e2b>=0.17.2a37,<1",  # E2B Workspace
+    "e2b>=0.17.2a37,<1.1.0",  # E2B Workspace
     "e2b-code-interpreter",  # E2B workspace
 ]
 
@@ -69,8 +71,6 @@ flyio_workspace_requirements = [
 ]
 
 tools_requirements = [
-    "tree_sitter_languages",
-    "tree_sitter==0.21.3",
     "pygments",
     "pathspec",
     "diskcache",
@@ -90,7 +90,7 @@ all_requirements = (
 
 setup(
     name="composio_core",
-    version="0.5.52-rc.2",
+    version="0.7.20",
     author="Utkarsh",
     author_email="utkarsh@composio.dev",
     description="Core package to act as a bridge between composio platform and other services.",

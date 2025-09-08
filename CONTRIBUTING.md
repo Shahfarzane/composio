@@ -27,16 +27,35 @@ A team member will be assigned to review your pull requests. All tests are run a
 
 If you want to contribute, start working through the codebase, navigate to the GitHub `issues` tab and start looking through interesting issues. If you are not sure of where to start, then start by trying one of the smaller/easier issues here i.e. issues with the `good first issue` label and then take a look at the issues with the `contributions welcome` label. These are issues that we believe are particularly well suited for outside contributions, often because we probably won't get to them right now. If you decide to start on an issue, leave a comment so that other people know that you're working on it. If you want to help out, but not alone, use the issue comment thread to coordinate.
 
-*Note:* When opening a PR make sure you open the PR against `development` and not the `master` branch.
+_Note:_ When opening a PR make sure you open the PR against `development` and not the `master` branch.
 
 ## Development setup
 
-- The simplest way to get setup for development on the framework is to install Python `>=3.8` and `pipenv`, then run the following:
+- The simplest way to get setup for development on the framework is to install Python `>=3.8` and `uv`, then run the following:
 
-      make env
-      pipenv shell
+      # Install uv
+      pip install uv
 
-##  For a clean PR run checks in the following order before pushing the code on a PR
+      # Create and activate virtual environment
+      uv venv
+      source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+
+      # Install dependencies
+      uv pip install -e .
+      uv pip install -e python/swe
+
+      # Install plugins as needed
+      uv pip install -e python/plugins/autogen
+      uv pip install -e python/plugins/claude
+      uv pip install -e python/plugins/crew_ai
+      uv pip install -e python/plugins/griptape
+      uv pip install -e python/plugins/julep
+      uv pip install -e python/plugins/langchain
+      uv pip install -e python/plugins/llamaindex
+      uv pip install -e python/plugins/lyzr
+      uv pip install -e python/plugins/openai
+
+## For a clean PR run checks in the following order before pushing the code on a PR
 
 - make clean
 - make format-code
@@ -44,7 +63,7 @@ If you want to contribute, start working through the codebase, navigate to the G
 
 ## Further commands needed during development
 
-We have various commands which are helpful during development.
+The following commands are helpful during development:
 
 - For independent linting and static analysis:
   - Use `tox -e isort` and `tox -e black` for formatting code
@@ -53,3 +72,49 @@ We have various commands which are helpful during development.
   - Use `tox -e mypy` for type checking
 
 Read more detailed guides on development [here](python/docs/development.md).
+
+## Contributing to docs
+
+To contribute to the documentation:
+
+1. Make sure you have Node.js installed on your system.
+
+2. Setup dependencies:
+
+   a. Install `uv` (required for generating Tool & Python documentation):
+
+   ```bash
+    curl -LsSf https://astral.sh/uv/install.sh | sh
+   ```
+
+   b. Generate Tool documentation:
+
+   ```bash
+   make tools-generate
+   ```
+
+   c. Install Fern globally:
+
+   ```bash
+   npm install -g fern-api
+   ```
+
+3. Start the docs server from the project root:
+
+   ```bash
+   make docs-dev
+   # or
+   # fern docs dev
+   ```
+
+4. View and edit docs at http://localhost:3000
+
+5. Before submitting your PR, check for broken links:
+
+   ```bash
+   fern docs broken-links
+   ```
+
+   This will ensure your documentation changes don't introduce any broken references.
+
+6. When you're happy with your changes, create a PR.

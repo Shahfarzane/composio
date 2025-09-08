@@ -50,7 +50,7 @@ prefix_messages = [
 
 # Initialize a FunctionCallingAgentWorker with the tools, LLM, and system messages
 agent = FunctionCallingAgentWorker(
-    tools=tools,  # Tools available for the agent to use
+    tools=tools,  # Tools available for the agent to use # type: ignore
     llm=llm,  # Language model for processing requests
     prefix_messages=prefix_messages,  # Initial system messages for context
     max_function_calls=10,  # Maximum number of function calls allowed
@@ -59,7 +59,7 @@ agent = FunctionCallingAgentWorker(
 ).as_agent()
 
 response = agent.chat(
-    """
+    f"""
 Book slots according to {todo}. 
 Properly Label them with the work provided to be done in that time period. 
 Schedule it for today. Today's date is {date} (it's in YYYY-MM-DD format) 

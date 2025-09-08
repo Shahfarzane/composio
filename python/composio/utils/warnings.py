@@ -15,26 +15,26 @@ _latest_version = None
 
 def _fetch_latest_version():
     global _latest_version
-    request = requests.get(COMPOSIO_PYPI_METADATA, timeout=10.0)
-    if request.status_code != 200:
-        return
+    try:
+        request = requests.get(COMPOSIO_PYPI_METADATA, timeout=10.0)
+        if request.status_code != 200:
+            return
 
-    data = request.json()
-    _latest_version = data["info"]["version"]
+        data = request.json()
+        _latest_version = data["info"]["version"]
+    except Exception:  # pylint: disable=broad-except
+        pass
 
 
 def create_latest_version_warning_hook(version: str):
+    if os.environ.get("COMPOSIO_DISABLE_VERSION_CHECK", "false").lower() != "false":
+        return lambda: None
+
     version_thread = threading.Thread(target=_fetch_latest_version, daemon=True)
     version_thread.start()
 
     def latest_version_warning() -> None:
         try:
-            if (
-                os.environ.get("COMPOSIO_DISABLE_VERSION_CHECK", "false").lower()
-                == "true"
-            ):
-                return
-
             version_thread.join(timeout=0.1)
             if _latest_version is None:
                 return

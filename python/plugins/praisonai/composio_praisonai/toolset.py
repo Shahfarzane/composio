@@ -1,12 +1,15 @@
 import os
 import typing as t
+import warnings
 
 import typing_extensions as te
 
 from composio import Action, ActionType, AppType
 from composio import ComposioToolSet as BaseComposioToolSet
 from composio import TagType
+from composio.exceptions import InvalidSchemaError
 from composio.tools.toolset import ProcessorsType
+from composio.utils import help_msg
 
 
 _openapi_to_python = {
@@ -21,6 +24,7 @@ class ComposioToolSet(
     BaseComposioToolSet,
     runtime="praisonai",
     description_char_limit=1024,
+    action_name_char_limit=64,
 ):
     """
     Composio toolset for PraisonAI framework.
@@ -61,8 +65,9 @@ class ComposioToolSet(
                     f"list[{schema_array_dtype}]" if schema_array_dtype else "list"
                 )
             else:
-                raise TypeError(
-                    f"Some dtype of current schema are not handled yet. Current Schema: {param_body}"
+                raise InvalidSchemaError(
+                    "Some dtype of current schema are not handled yet. "
+                    f"Current Schema: {param_body}"
                 )
 
             input_model_lines.append(
@@ -76,6 +81,7 @@ class ComposioToolSet(
             action=Action(value=tool_identifier),
             params=params,
             entity_id=self.entity_id,
+            _check_requested_actions=True,
         )
 
     def _process_basetool(
@@ -167,7 +173,7 @@ class ComposioToolSet(
 
         return "\n".join(tools_section_parts)
 
-    @te.deprecated("Use `ComposioToolSet.get_tools` instead")
+    @te.deprecated("Use `ComposioToolSet.get_tools` instead.\n", category=None)
     def get_actions(
         self,
         actions: t.Sequence[ActionType],
@@ -180,6 +186,11 @@ class ComposioToolSet(
         :param entity_id: Entity ID to use for executing function calls.
         :return: Name of the tools written
         """
+        warnings.warn(
+            "Use `ComposioToolSet.get_tools` instead.\n" + help_msg(),
+            DeprecationWarning,
+            stacklevel=2,
+        )
         return self.get_tools(actions=actions, entity_id=entity_id)
 
     def get_tools(
@@ -204,7 +215,7 @@ class ComposioToolSet(
         """
         self.validate_tools(apps=apps, actions=actions, tags=tags)
         if processors is not None:
-            self._merge_processors(processors)
+            self._processor_helpers.merge_processors(processors)
         return [
             self._write_tool(
                 schema=tool.model_dump(exclude_none=True),
@@ -215,5 +226,6 @@ class ComposioToolSet(
                 apps=apps,
                 tags=tags,
                 check_connected_accounts=check_connected_accounts,
+                _populate_requested=True,
             )
         ]

@@ -1,5 +1,6 @@
 import types
 import typing as t
+import warnings
 from inspect import Signature
 
 import pydantic
@@ -10,6 +11,7 @@ from langchain_core.tools import StructuredTool as BaseStructuredTool
 from composio import ActionType, AppType, TagType
 from composio.tools import ComposioToolSet as BaseComposioToolSet
 from composio.tools.toolset import ProcessorsType
+from composio.utils import help_msg
 from composio.utils.pydantic import parse_pydantic_error
 from composio.utils.shared import (
     get_signature_format_from_schema_params,
@@ -29,6 +31,7 @@ class ComposioToolSet(
     BaseComposioToolSet,
     runtime="langchain",
     description_char_limit=1024,
+    action_name_char_limit=64,
 ):
     """
     Composio toolset for Langchain framework.
@@ -85,6 +88,7 @@ class ComposioToolSet(
                 action=action,
                 params=kwargs,
                 entity_id=entity_id or self.entity_id,
+                _check_requested_actions=True,
             )
 
         action_func = types.FunctionType(
@@ -107,6 +111,7 @@ class ComposioToolSet(
         self,
         schema: t.Dict[str, t.Any],
         entity_id: t.Optional[str] = None,
+        skip_default: bool = False,
     ) -> StructuredTool:
         """Wraps composio tool as Langchain StructuredTool object."""
         action = schema["name"]
@@ -120,6 +125,7 @@ class ComposioToolSet(
         )
         parameters = json_schema_to_model(
             json_schema=schema_params,
+            skip_default=skip_default,
         )
         tool = StructuredTool.from_function(
             name=action,
@@ -127,10 +133,12 @@ class ComposioToolSet(
             args_schema=parameters,
             return_schema=True,
             func=action_func,
+            handle_tool_error=True,
+            handle_validation_error=True,
         )
         return tool  # type: ignore
 
-    @te.deprecated("Use `ComposioToolSet.get_tools` instead")
+    @te.deprecated("Use `ComposioToolSet.get_tools` instead.\n", category=None)
     def get_actions(
         self,
         actions: t.Sequence[ActionType],
@@ -144,6 +152,11 @@ class ComposioToolSet(
 
         :return: Composio tools wrapped as `StructuredTool` objects
         """
+        warnings.warn(
+            "Use `ComposioToolSet.get_tools` instead.\n" + help_msg(),
+            DeprecationWarning,
+            stacklevel=2,
+        )
         return self.get_tools(actions=actions, entity_id=entity_id)
 
     def get_tools(
@@ -154,6 +167,7 @@ class ComposioToolSet(
         entity_id: t.Optional[str] = None,
         *,
         processors: t.Optional[ProcessorsType] = None,
+        skip_default: bool = False,
         check_connected_accounts: bool = True,
     ) -> t.Sequence[StructuredTool]:
         """
@@ -168,18 +182,19 @@ class ComposioToolSet(
         """
         self.validate_tools(apps=apps, actions=actions, tags=tags)
         if processors is not None:
-            self._merge_processors(processors)
+            self._processor_helpers.merge_processors(processors)
+
         return [
             self._wrap_tool(
-                schema=tool.model_dump(
-                    exclude_none=True,
-                ),
+                schema=tool.model_dump(exclude_none=True),
                 entity_id=entity_id or self.entity_id,
+                skip_default=skip_default,
             )
             for tool in self.get_action_schemas(
                 actions=actions,
                 apps=apps,
                 tags=tags,
                 check_connected_accounts=check_connected_accounts,
+                _populate_requested=True,
             )
         ]

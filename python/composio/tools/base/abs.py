@@ -3,6 +3,7 @@
 import hashlib
 import inspect
 import json
+import textwrap
 import typing as t
 from abc import abstractmethod
 from pathlib import Path
@@ -13,6 +14,7 @@ import pydantic
 from pydantic import BaseModel, Field
 
 from composio.client.enums import Action as ActionEnum
+from composio.client.enums.base import DEPRECATED_MARKER
 from composio.exceptions import ComposioSDKError
 from composio.utils.logging import WithLogger
 from composio.utils.pydantic import parse_pydantic_error
@@ -25,13 +27,12 @@ ActionRequest = t.TypeVar("ActionRequest")
 Loadable = t.TypeVar("Loadable")
 ToolRegistry = t.Dict[GroupID, t.Dict[str, "Tool"]]
 ActionsRegistry = t.Dict[GroupID, t.Dict[str, "Action"]]
+# TODO: create a Trigger type for this
 TriggersRegistry = t.Dict[GroupID, t.Dict[str, t.Any]]
 
 tool_registry: ToolRegistry = {"runtime": {}, "local": {}, "api": {}}
 action_registry: ActionsRegistry = {"runtime": {}, "local": {}, "api": {}}
 trigger_registry: TriggersRegistry = {"runtime": {}, "local": {}, "api": {}}
-
-DEPRECATED_MARKER = "<<DEPRECATED use "
 
 
 def remove_json_ref(data: t.Dict) -> t.Dict:
@@ -39,9 +40,11 @@ def remove_json_ref(data: t.Dict) -> t.Dict:
         jsonref.dumps(
             jsonref.replace_refs(
                 obj=data,
+                jsonschema=True,
+                merge_props=True,
                 lazy_load=False,
+                proxies=False,
             ),
-            indent=2,
         )
     )
 
@@ -59,6 +62,22 @@ def generate_app_id(name: str) -> str:
             hash_string[20:],
         )
     )
+
+
+def humanize_titles(properties: t.Dict) -> t.Dict:
+    for name, prop in properties.items():
+        if "file_uploadable" in prop:
+            continue
+
+        prop["title"] = inflection.underscore(name).replace("_", " ").title()
+        if "properties" in prop:
+            prop["properties"] = humanize_titles(prop["properties"])
+
+    return properties
+
+
+class InvalidPropertyDefinition(ComposioSDKError):
+    """Raise when a property is not defined properly."""
 
 
 class InvalidClassDefinition(ComposioSDKError):
@@ -93,46 +112,61 @@ class _Request(t.Generic[ModelType]):
         """Initialize request model."""
         self.model = model
 
-    def schema(self) -> t.Dict:
-        """Build request schema."""
-        request = t.cast(t.Type[BaseModel], self.model).model_json_schema(by_alias=True)
-        request = remove_json_ref(request)
-        if "$defs" in request:
-            del request["$defs"]
+    @classmethod
+    def _handle_allOf(cls, prop: t.Dict) -> t.Dict:
+        schemas = prop.pop("allOf")
+        for schema in schemas:
+            prop.update(schema)
 
-        properties = request.get("properties", {})
-        for prop in properties.values():
-            if prop.get("file_readable", False):
-                prop["oneOf"] = [
-                    {
-                        "type": prop.get("type"),
-                        "description": prop.get("description", ""),
-                    },
-                    {
-                        "type": "string",
-                        "format": "file-path",
-                        "description": f"File path to {prop.get('description', '')}",
-                    },
-                ]
-                del prop["type"]  # Remove original type to avoid conflict in oneOf
-                continue
+        if "enum" in prop:
+            prop[
+                "description"
+            ] += f" Note: choose value only from following options - {prop['enum']}"
+        return prop
 
+    @classmethod
+    def _handle_anyOf(cls, prop: t.Dict) -> t.Dict:
+        any_of = prop.pop("anyOf")
+        non_null_types = [
+            td for td in any_of if "type" not in td or td["type"] != "null"
+        ]
+        if not non_null_types:
+            raise InvalidPropertyDefinition(
+                f"No non-null type found for field {prop['title']}"
+            )
+
+        if len([td for td in any_of if "type" not in td or td["type"] != "null"]) > 0:
+            prop["nullable"] = True
+
+        prop.update(any_of[0])
+        return prop
+
+    @classmethod
+    def _remove_union_types_recursively(cls, schema: t.Dict) -> t.Dict:
+        properties = humanize_titles(schema.get("properties", {}))
+        for name, prop in properties.items():
             if "allOf" in prop and len(prop["allOf"]) == 1:
-                (schema,) = prop.pop("allOf")
-                prop.update(schema)
-                if "enum" in schema:
-                    prop[
-                        "description"
-                    ] += f" Note: choose value only from following options - {prop['enum']}"
+                properties[name] = cls._handle_allOf(prop=prop)
 
             if "anyOf" in prop:
-                typedef, *_ = [
-                    td for td in prop["anyOf"] if td.get("type", "null") != "null"
-                ]
-                prop["type"] = typedef["type"]
+                properties[name] = cls._handle_anyOf(prop=prop)
 
-        request["properties"] = properties
-        return request
+            if "properties" in prop:
+                properties[name] = cls._remove_union_types_recursively(schema=prop)
+
+        schema["properties"] = properties
+        return schema
+
+    def schema(self) -> t.Dict:
+        """Build request schema."""
+        request = remove_json_ref(
+            t.cast(t.Type[BaseModel], self.model).model_json_schema(
+                by_alias=True,
+            )
+        )
+        if "$defs" in request:
+            del request["$defs"]
+        return self._remove_union_types_recursively(schema=request)
 
     def parse(self, request: t.Dict) -> ModelType:
         """Parse request."""
@@ -152,7 +186,25 @@ class _Response(t.Generic[ModelType]):
 
     @classmethod
     def wrap(cls, model: t.Type[ModelType]) -> t.Type[BaseModel]:
-        class wrapper(model):  # type: ignore
+        if "data" not in model.__annotations__:
+
+            class wrapper(BaseModel):  # type: ignore
+                data: model = Field(  # type: ignore
+                    ...,
+                    description="Data from the action execution",
+                )
+                successful: bool = Field(
+                    ...,
+                    description="Whether or not the action execution was successful or not",
+                )
+                error: t.Optional[str] = Field(
+                    None,
+                    description="Error if any occurred during the execution of the action",
+                )
+
+            return t.cast(t.Type[BaseModel], wrapper)
+
+        class wrapper(model):  # type: ignore # pylint: disable=function-redefined
             successful: bool = Field(
                 ...,
                 description="Whether or not the action execution was successful or not",
@@ -171,34 +223,10 @@ class _Response(t.Generic[ModelType]):
         if "$defs" in schema:
             del schema["$defs"]
 
-        properties = schema.get("properties", {})
-        for prop in properties.values():
-            if prop.get("file_readable", False):
-                prop["oneOf"] = [
-                    {
-                        "type": prop.get("type"),
-                        "description": prop.get("description", ""),
-                    },
-                    {
-                        "type": "string",
-                        "format": "file-path",
-                        "description": f"File path to {prop.get('description', '')}",
-                    },
-                ]
-                del prop["type"]  # Remove original type to avoid conflict in oneOf
-                continue
-
-            if "allOf" in prop and len(prop["allOf"]) == 1:
-                (schema,) = prop.pop("allOf")
-                prop.update(schema)
-                if "enum" in schema:
-                    prop[
-                        "description"
-                    ] += f" Note: choose value only from following options - {prop['enum']}"
-
-        schema["properties"] = properties
-        schema["title"] = self.model.__name__
-        return remove_json_ref(schema)
+        # pylint: disable=protected-access
+        schema = _Request._remove_union_types_recursively(schema=schema)
+        schema["title"] = f"{self.model.__name__}Wrapper"
+        return schema
 
 
 class ActionBuilder:
@@ -270,8 +298,9 @@ class ActionBuilder:
                 .strip()
             ),
         )
+        description = " ".join(description.split())
         description, separator, enum = description.partition(DEPRECATED_MARKER)
-        return inflection.titleize(description) + separator + enum
+        return inflection.humanize(description) + separator + enum
 
 
 class ActionMeta(type):
@@ -314,6 +343,9 @@ class Action(
 
     response: _Response[ActionResponse]
     """Response helper."""
+
+    scopes: t.Optional[t.List[str]] = None
+    """Scopes required for the action."""
 
     file: str
     """Path to the file containing the action"""
@@ -375,8 +407,8 @@ class ToolBuilder:
                     f"Please implement {name}.{method} as class method"
                 )
 
-    @staticmethod
-    def set_metadata(obj: t.Type["Tool"]) -> None:
+    @classmethod
+    def set_metadata(cls, obj: t.Type["Tool"]) -> None:
         setattr(obj, "file", Path(inspect.getfile(obj)))
         setattr(obj, "gid", getattr(obj, "gid", "local"))
         setattr(obj, "name", getattr(obj, "name", inflection.underscore(obj.__name__)))
@@ -390,18 +422,19 @@ class ToolBuilder:
                 inflection.humanize(inflection.underscore(obj.__name__)),
             ),
         )
-        setattr(obj, "description", (obj.__doc__ or obj.display_name).lstrip().rstrip())
+        setattr(obj, "description", cls._get_description(obj=obj))
         setattr(obj, "_actions", getattr(obj, "_actions", {}))
         setattr(obj, "_triggers", getattr(obj, "_triggers", {}))
 
     @staticmethod
-    def setup_children(obj: t.Type["Tool"]) -> None:
+    def setup_children(obj: t.Type["Tool"], no_auth: bool = False) -> None:
         if obj.gid not in action_registry:
             action_registry[obj.gid] = {}
 
         for action in obj.actions():
             action.tool = obj.name
             action.enum = f"{obj.enum}_{action.name.upper()}"
+            action.no_auth = no_auth
             if obj.requires is not None:
                 action.requires = list(set(obj.requires + (action.requires or [])))
             obj._actions[action.enum] = action  # pylint: disable=protected-access
@@ -424,6 +457,18 @@ class ToolBuilder:
 
             if hasattr(obj, "logo"):
                 setattr(trigger, "logo", getattr(obj, "logo"))
+
+    @staticmethod
+    def _get_description(obj) -> str:
+        return " ".join(
+            line
+            for line in textwrap.dedent(
+                (obj.__doc__ if obj.__doc__ else obj.display_name)
+            )
+            .strip()
+            .splitlines()
+            if line
+        )
 
 
 class Tool(WithLogger, _Attributes):
@@ -503,7 +548,7 @@ class Tool(WithLogger, _Attributes):
         :param params: Execution parameters.
         :param metadata: A dictionary containing metadata for action.
         """
-        raise NotImplementedError()
+        raise NotImplementedError
 
     @classmethod
     def register(cls: t.Type["Tool"]) -> None:
